@@ -49,3 +49,4 @@ Make sure you have [Heroky CLI](https://devcenter.heroku.com/articles/heroku-cli
 - `heroku apps:create` - create Heroku app
 - `git push heroku master` - push changes to Heroku and trigger deploying
 - Now you have to configure frame app to use the URL provided by Heroku like `https://<APP-NAME>.herokuapp.com/topcoder-micro-frontends-model-app.js` to load this microapp.
+
