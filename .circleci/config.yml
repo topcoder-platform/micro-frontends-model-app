@@ -68,7 +68,7 @@ workflows:
           filters:
             branches:
               only:
-                - dev
+                - c
 
       # Production builds are exectuted only on tagged commits to the
       # master branch.
