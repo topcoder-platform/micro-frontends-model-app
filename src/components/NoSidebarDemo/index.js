@@ -9,7 +9,7 @@ import {
   enableSidebarForRoute,
 } from "@topcoder/micro-frontends-navbar-app";
 
-const COMPONENT_ROUTE = "/model/no-sidebar/*";
+const COMPONENT_ROUTE = "/model/mfe/no-sidebar/*";
 
 const NoSidebarDemo = () => {
   // use "useLayoutEffect" to remove the sidebar as early as possible

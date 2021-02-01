@@ -1,0 +1,50 @@
+import Copyright from "../common/copyright.md";
+
+export const Box = () => (
+  <div style={{ padding: 20, backgroundColor: "tomato" }}>Append entry to `src/constants/appMenu.js` in the format :</div>
+);
+
+# How to use MDX Components
+
+This is **markdown** with <span style={{color: "red"}}>JSX</span>: MDX!
+
+<Box />
+
+```js
+const appMenu = [
+  {
+    title: "Documentation",
+    path: "/model",
+    icon: pageIcon,
+    activeIcon: pageActiveIcon,
+  },
+  {
+    title: "Help",
+    children: [
+      {
+        title: "How to Add Pages",
+        path: "/model/help/add-pages",
+        id: "add-pages",
+        fileName: "add-pages.mdx",
+        filePath: "/help",
+      },
+      {
+        title: "How to document API's",
+        path: "/model/help/api-example",
+        id: "api-example",
+        fileName: "api_example.mdx",
+        filePath: "/help",
+      },
+      {
+        title: "How to use MDX Components",
+        path: "/model/help/mdx-component-example",
+        id: "mdx-component-example",
+        fileName: "mdx-component-example.mdx",
+        filePath: "/help",
+      },
+    ],
+  },
+]
+```
+
+<Copyright />
