@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import AuthDemo from "./components/AuthDemo";
 import NoSidebarDemo from "./components/NoSidebarDemo";
 import Documents from "./components/Documents";
+import ReDocDemo from "./components/ReDocDemo";
 import "./styles/main.module.scss";
 
 export default function Root() {
@@ -23,6 +24,7 @@ export default function Root() {
         <Documents path="/model/challenge-v5-api/:documentId" />
         <AuthDemo path="/model/mfe/auth" />
         <NoSidebarDemo path="/model/mfe/no-sidebar" />
+        <ReDocDemo path="/model/redoc" />
       </Router>
     </div>
   );

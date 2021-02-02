@@ -76,6 +76,12 @@ const appMenu = [
       },
     ],
   },
+  {
+    title: "ReDoc",
+    path: "/model/redoc",
+    icon: pageIcon,
+    activeIcon: pageActiveIcon,
+  },
 ];
 
 export default appMenu;
