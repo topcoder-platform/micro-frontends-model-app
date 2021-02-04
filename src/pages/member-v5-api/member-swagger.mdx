@@ -12,16 +12,9 @@ import memberV5Swagger from "../../assets/openapi/member-v5-swagger-openapi3.yam
 
 export const memberV5API = () => {
   const authUserTokens = useAsync(getAuthUserTokens);
-  const authUserProfile = useAsync(getAuthUserProfile);
-  var v3Token
-  if (!authUserProfile.loading) {
-    if (authUserTokens.value.tokenV3) {
-      v3Token = 'Bearer ' + authUserTokens.value.tokenV3
-    }
-  }
   return <SwaggerUI spec={memberV5Swagger} onComplete={(swaggerUi) => {
-    if (v3Token) {
-      swaggerUi.preauthorizeApiKey('bearer', v3Token);
+    if (authUserTokens.value.tokenV3) {
+      swaggerUi.preauthorizeApiKey('bearer', 'Bearer ' + authUserTokens.value.tokenV3);
     }
   }} />
 };
