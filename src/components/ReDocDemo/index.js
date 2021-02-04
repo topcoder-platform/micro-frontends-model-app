@@ -26,7 +26,11 @@ const ReDocDemo = () => {
         </button>
       </div>
       <RedocStandalone
-        specUrl="https://petstore.swagger.io/v2/swagger.json"
+        specUrl="https://raw.githubusercontent.com/topcoder-platform/member-api/master/docs/swagger.yaml"
+        options={{
+          nativeScrollbars: true,
+          theme: { colors: { primary: { main: '#dd5522' } } },
+        }}
       />
     </div>
   );

@@ -1,8 +1,29 @@
+
+import { useAsync } from "react-use";
+import {
+  login,
+  logout,
+  getAuthUserTokens,
+  getAuthUserProfile,
+} from "@topcoder/micro-frontends-navbar-app";
 import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
+import memberV5Swagger from "../../assets/openapi/member-v5-swagger-openapi3.yaml";
 
 export const memberV5API = () => {
-  return <SwaggerUI url="https://raw.githubusercontent.com/topcoder-platform/member-api/master/docs/swagger.yaml" />;
+  const authUserTokens = useAsync(getAuthUserTokens);
+  const authUserProfile = useAsync(getAuthUserProfile);
+  var v3Token
+  if (!authUserProfile.loading) {
+    if (authUserTokens.value.tokenV3) {
+      v3Token = 'Bearer ' + authUserTokens.value.tokenV3
+    }
+  }
+  return <SwaggerUI spec={memberV5Swagger} onComplete={(swaggerUi) => {
+    if (v3Token) {
+      swaggerUi.preauthorizeApiKey('bearer', v3Token);
+    }
+  }} />
 };
 
 export default memberV5API;
