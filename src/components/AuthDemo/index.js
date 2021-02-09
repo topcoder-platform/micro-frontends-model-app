@@ -6,38 +6,28 @@ import {
   getAuthUserTokens,
   getAuthUserProfile,
 } from "@topcoder/micro-frontends-navbar-app";
+import "./styles.module.scss";
 
 const Profile = ({ authUserProfile }) => (
-  <>
-    <h3>User Profile</h3>
+  <div>
     {authUserProfile.loading ? (
-      <div>User Profile Loading...</div>
+      <div>Member Profile Loading...</div>
     ) : authUserProfile.error ? (
       <div>Profile Loading Error: {authUserProfile.error.message}</div>
     ) : (
-      <ul>
-        <li>
-          <strong>Handle: </strong> {authUserProfile.value.handle}
-        </li>
-        <li>
-          <strong>First Name: </strong> {authUserProfile.value.firstName}
-        </li>
-        <li>
-          <strong>Last Name: </strong> {authUserProfile.value.lastName}
-        </li>
-      </ul>
+      <div>
+        <p>Welcomes {authUserProfile.value.firstName} {authUserProfile.value.lastName}</p>
+        <p>Your handle is {authUserProfile.value.handle}</p>
+      </div>
     )}
-  </>
+  </div>
 );
 
 const AuthDemo = () => {
-  // see how the `useAsync` hook works here https://github.com/streamich/react-use/blob/master/docs/useAsync.md
   const authUserTokens = useAsync(getAuthUserTokens);
   const authUserProfile = useAsync(getAuthUserProfile);
-
   return (
-    <>
-      <h2>Authentication</h2>
+    <div>
       {authUserTokens.loading ? (
         <div>Authentication...</div>
       ) : authUserTokens.error ? (
@@ -46,17 +36,17 @@ const AuthDemo = () => {
         <div>
           {authUserTokens.value.tokenV3 ? (
             <div>
-              User is logged-in <button onClick={logout}>Logout</button>
+              Member is logged in, you can click on the button to logout : <button onClick={logout}>Logout</button>
               <Profile authUserProfile={authUserProfile} />
             </div>
           ) : (
-            <>
-              User is logged-out <button onClick={login}>Login</button>
-            </>
+            <div>
+              Please log in, by click on the button : <button onClick={login}>Login</button>
+            </div>
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
