@@ -17,12 +17,18 @@ const appMenu = [
     title: "Micro Frontends",
     children: [
       {
-        title: "Auth Demo",
-        path: "/model/mfe/auth",
+        title: "Authentication",
+        path: "/model/micro-frontends/auth-demo",
+        id: "auth-demo",
+        fileName: "auth-demo.mdx",
+        filePath: "/micro-frontends",
       },
       {
-        title: "No Sidebar Demo",
-        path: "/model/mfe/no-sidebar",
+        title: "Toggling Sidebar",
+        path: "/model/micro-frontends/no-sidebar-demo",
+        id: "no-sidebar-demo",
+        fileName: "no-sidebar-demo.mdx",
+        filePath: "/micro-frontends",
       },
     ],
   },
@@ -64,7 +70,7 @@ const appMenu = [
         title: "How to document API's",
         path: "/model/help/api-example",
         id: "api-example",
-        fileName: "api_example.mdx",
+        fileName: "api-example.mdx",
         filePath: "/help",
       },
       {
@@ -75,7 +81,7 @@ const appMenu = [
         filePath: "/help",
       },
     ],
-  },
+  }
 ];
 
 export default appMenu;

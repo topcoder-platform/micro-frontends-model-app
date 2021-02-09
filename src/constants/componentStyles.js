@@ -20,16 +20,36 @@ const listStyle = styled.ul`
   padding-bottom: 5px;
 `;
 
-const paragraphStyle = styled.p`
+const numberStyle = styled.ol`
+  list-style: decimal;
   line-height: 150%;
+  padding-left: 30px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+`;
+
+const paragraphStyle = styled.p`
+  line-height: 170%;
+`;
+
+const h1Style = styled.h1`
+  line-height: 210%;
+  font-weight: 500;
 `;
 
 const h2Style = styled.h2`
-  line-height: 150%;
+  line-height: 190%;
+  font-weight: 500;
 `;
 
 const h3Style = styled.h3`
-  line-height: 150%;
+  line-height: 170%;
+  font-weight: 500;
+`;
+
+const h4Style = styled.h4`
+  line-height: 170%;
+  font-weight: 500;
 `;
 
 const inlineCodeStyle = styled.code`
@@ -41,8 +61,11 @@ const inlineCodeStyle = styled.code`
 export default {
   urlStyle,
   listStyle,
+  numberStyle,
   paragraphStyle,
+  h1Style,
   h2Style,
   h3Style,
+  h4Style,
   inlineCodeStyle,
 };

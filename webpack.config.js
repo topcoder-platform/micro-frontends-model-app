@@ -65,6 +65,10 @@ module.exports = (webpackConfigEnv, argv) => {
           test: /\.mdx?$/,
           use: ["babel-loader", "@mdx-js/loader"],
         },
+        {
+          test: /\.yaml$/,
+          use: 'js-yaml-loader',
+        },
       ],
     },
     resolve: {
