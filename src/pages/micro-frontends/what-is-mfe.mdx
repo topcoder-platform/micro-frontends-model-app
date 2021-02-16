@@ -1,0 +1,84 @@
+import BasicGraph from "../../components/BasicGraph"
+
+# What is Micro frontend?
+
+> This is a concept of extending micro services to the frontend world. The current trend is to build a feature-rich and powerful browser application, aka single page app, which sits on top of a micro service architecture. Over time the frontend layer, often developed by a separate team, grows and gets more difficult to maintain. That’s what we call a Frontend Monolith.
+
+> The idea behind Micro Frontends is to think about a website or web app as a composition of features which are owned by independent teams. Each team has a distinct area of business or mission it cares about and specialises in. A team is cross functional and develops its features end-to-end, from database to user interface. Micro Frontends is clearly a more friendly and less bulky term.
+
+> The concept of Micro Frontend Architecture is to think about a web application as a composition of features owned by different independent teams. Each team having a distinct area of business that it specializes in.
+
+## Core Ideas behind Micro Frontends
+
+- Be Technology Agnostic
+  Each team should be able to choose and upgrade their stack without having to coordinate with other teams. Custom Elements are a great way to hide implementation details while providing a neutral interface to others.
+    
+
+- Isolate Team Code
+  Don’t share a runtime, even if all teams use the same framework. Build independent apps that are self contained. Don’t rely on shared state or global variables.
+
+
+- Establish Team Prefixes
+  Agree on naming conventions where isolation is not possible yet. Namespace CSS, Events, Local Storage and Cookies to avoid collisions and clarify ownership.
+
+
+- Favor Native Browser Features over Custom APIs
+  Use Browser Events for communication instead of building a global PubSub system. If you really have to build a cross team API, try keeping it as simple as possible.
+
+
+- Build a Resilient Site
+  Your feature should be useful, even if JavaScript failed or hasn’t executed yet. Use Universal Rendering and Progressive Enhancement to improve perceived performance.
+
+## Our Objective
+
+- The core MicroFrame in which MicroApplications can be run.
+
+- Parallel development of the MicroApplications that will run in the same MicroFrame is of key importance. Need “Team A” working on “Application A”, while “Team B” working on “Application B” running on the same MicroFrame.
+
+- Manage, develop and deploy code of the MicroApplications through separate repositories, achieve separation of applications. Need “Team A” working on “Application A” in “Repo A”, while “Team B” working on “Application B” in “Repo B”, when deployed should run on the same MicroFrame with latest code from both “Repo A” & “Repo B” of each individual MicroApplication.
+
+- Handle authentication between “Application A” & “Application B” while running on the same MicroFrame. Support applications that don't require authentication.
+
+- We don’t want “Application A” or “Application B” to run in standalone mode, only through the same MicroFrame will the MicroApplications be accessible.
+
+- Achieving communication between the MicroApplications via global state management.
+
+- Documentation on developing other MicroApplications on the MicroFrame.
+
+## What we have achieved
+
+export const elements = [
+  { id: '1', data: { label: 'Micro Frontends Frame' }, style: { background: 'orange', color: 'black', border: '1px solid orange', width: 150, height: 45 }, position: { x: 300, y: 5 } },
+  { id: '2', data: { label: 'Micro Frontends Navbar App' }, style: { background: 'orange', color: 'black', border: '1px solid orange', width: 150, height: 45 }, position: { x: 55, y: 60 } },
+  { id: '3', data: { label: 'Micro Frontends Model App' }, style: { background: 'orange', color: 'black', border: '1px solid orange', width: 150, height: 45 }, position: { x: 135, y: 110 } },
+  { id: '4', data: { label: 'Micro Frontends Submission Review App' }, style: { background: 'orange', color: 'black', border: '1px solid orange', width: 150, height: 45 }, position: { x: 225, y: 160 } },
+  { id: '5', data: { label: 'Micro Frontends Earn App' }, style: { background: 'orange', color: 'black', border: '1px solid orange', width: 150, height: 45 }, position: { x: 385, y: 160 } },
+  { id: '6', data: { label: 'Micro Frontends React App' }, style: { background: 'orange', color: 'black', border: '1px solid orange', width: 150, height: 45 }, position: { x: 475, y: 110 } },
+  { id: '7', data: { label: 'Micro Frontends Angular App' }, style: { background: 'orange', color: 'black', border: '1px solid orange', width: 150, height: 45 }, position: { x: 560, y: 60 } },
+  { id: 'e1-2', source: '1', target: '2', style: { stroke: 'orange', 'stroke-width': '1px' }, animated: false },
+  { id: 'e1-3', source: '1', target: '3', style: { stroke: 'orange', 'stroke-width': '1px' }, animated: false },
+  { id: 'e1-4', source: '1', target: '4', style: { stroke: 'orange', 'stroke-width': '1px' }, animated: false },
+  { id: 'e1-5', source: '1', target: '5', style: { stroke: 'orange', 'stroke-width': '1px' }, animated: false },
+  { id: 'e1-6', source: '1', target: '6', style: { stroke: 'orange', 'stroke-width': '1px' }, animated: false },
+  { id: 'e1-7', source: '1', target: '7', style: { stroke: 'orange', 'stroke-width': '1px' }, animated: false },
+];
+export const graphStyles = { width: '100%', height: '220px' };
+
+<BasicGraph elements={elements} graphStyles={graphStyles} />
+
+- The [Micro Frontends Frame](https://github.com/topcoder-platform/micro-frontends-frame) that runs numerous micro apps.
+- The [Micro Frontends Navbar App](https://github.com/topcoder-platform/micro-frontends-navbar-app) that runs the overall navigation bar for the Micro Frontends Frame.
+- The [Micro Frontends Model App](https://github.com/topcoder-platform/micro-frontends-model-app) that runs the this documentation app.
+- The [Micro Frontends Submission Review App](https://github.com/topcoder-platform/micro-frontends-submission-review-app)
+- The [Micro Frontends Earn App](https://github.com/topcoder-platform/micro-frontends-earn-app)
+- The [Micro Frontends React App](https://github.com/topcoder-platform/micro-frontends-react-app) that runs a sample micro frontends react built app
+- The [Micro Frontends Angular App](https://github.com/topcoder-platform/micro-frontends-angular-app) that runs a sample micro frontends angular built app
+
+## Communication between Micro Applications
+
+> Topcoder has exposed a few endpoints from the navigation bar, that can be imported by any micro fronends app following the best practices.
+
+### Demonstration of exposed endpoints
+
+- [Authentication](/model/micro-frontends/auth-demo)
+- [Toggling Sidebar](/model/micro-frontends/no-sidebar-demo)
