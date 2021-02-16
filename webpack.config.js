@@ -80,6 +80,11 @@ module.exports = (webpackConfigEnv, argv) => {
       },
     },
     plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          APPENV: JSON.stringify(process.env.APPENV),
+        },
+      }),
       new webpack.ProvidePlugin({
         Buffer: ["buffer", "Buffer"],
       }),

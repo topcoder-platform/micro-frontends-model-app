@@ -1,0 +1,9 @@
+
+# Where will my application live?
+
+> During development, you application can live almost anywhere (locally, Heroku, AWS, …etc). However - as it matures and moves to production - in most cases, it will live on AWS (that is our current standard). It may help during early development phases to keep this in mind.
+
+On AWS we have several environmental standards catering to various needs:
+- ECS for applications that have a “server-side” component
+- S3 + Cloudfront for applications that run entirely in the browser and make direct API calls for data (Connect is such an application)
+- Lambda + AWS API Gateway (note: serverless.com is our standard for doing this

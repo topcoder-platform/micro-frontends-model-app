@@ -6,7 +6,6 @@ import {
   getAuthUserTokens,
   getAuthUserProfile,
 } from "@topcoder/micro-frontends-navbar-app";
-import "./styles.module.scss";
 
 const Profile = ({ authUserProfile }) => (
   <div>

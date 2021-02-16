@@ -40,6 +40,7 @@ export const Code = ({ codeString, children, language, ...props }) => {
             ...style,
             padding: "2rem",
             position: "relative",
+            border: "1px white solid"
           }}
         >
           <Button

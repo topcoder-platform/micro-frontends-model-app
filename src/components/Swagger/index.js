@@ -1,4 +1,5 @@
 
+import React from "react";
 import { useAsync } from "react-use";
 import {
   login,
@@ -8,15 +9,14 @@ import {
 } from "@topcoder/micro-frontends-navbar-app";
 import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
-import memberV5Swagger from "../../assets/openapi/member-v5-swagger-openapi3.yaml";
 
-export const memberV5API = () => {
+export const Swagger = ({ swaggerSpec }) => {
   const authUserTokens = useAsync(getAuthUserTokens);
-  return <SwaggerUI spec={memberV5Swagger} onComplete={(swaggerUi) => {
+  return <SwaggerUI spec={swaggerSpec} onComplete={(swaggerUi) => {
     if (authUserTokens.value.tokenV3) {
       swaggerUi.preauthorizeApiKey('bearer', 'Bearer ' + authUserTokens.value.tokenV3);
     }
   }} />
 };
 
-export default memberV5API;
+export default Swagger;

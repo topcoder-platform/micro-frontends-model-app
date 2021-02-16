@@ -7,9 +7,6 @@ import styled from "styled-components";
 
 const urlStyle = styled.a`
   color: #0c93e4 !important;
-  text-decoration-line: underline;
-  text-decoration-style: single;
-  font-weight: 600;
 `;
 
 const listStyle = styled.ul`
@@ -30,6 +27,7 @@ const numberStyle = styled.ol`
 
 const paragraphStyle = styled.p`
   line-height: 170%;
+  margin: 5px 5px 5px 5px;
 `;
 
 const h1Style = styled.h1`
@@ -58,6 +56,16 @@ const inlineCodeStyle = styled.code`
   padding: 2px 4px;
 `;
 
+const blockquoteStyle = styled.blockquote`
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+  padding: 5px 5px 5px 5px;
+`;
+
+const strongStyle = styled.strong`
+  font-weight: bold;
+`;
+
 export default {
   urlStyle,
   listStyle,
@@ -68,4 +76,6 @@ export default {
   h3Style,
   h4Style,
   inlineCodeStyle,
+  blockquoteStyle,
+  strongStyle
 };

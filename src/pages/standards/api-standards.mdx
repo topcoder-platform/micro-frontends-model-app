@@ -1,0 +1,246 @@
+import MTable from "../../components/MTable"
+
+export const RequestUrl = props => (
+  <p><span style={{ color: props.iconColor }}>{props.icon}</span> [<span style={{ color: props.methodColor }}>{props.method}</span>] <span style={{ color: props.urlColor }}>{props.url}</span></p>
+);
+
+export const TxtColor = props => (
+  <p><span style={{ color: props.txtColor }}>{props.txt}</span></p>
+);
+
+# API Standards
+
+Here are several conventions we should follow before designing our v5 api’s
+
+- During designing we recommend utilizing **Swagger**
+
+- Keeping in mind **Command Query Responsibility Segregation (CQRS)**, a design pattern used in microservices architecture which will have a separate service, model, and database for insert operations in the database. This acts as a command layer and separate service, model, and database for query data that acts as a query layer.
+
+- **Elasticsearch is the key**.
+
+  Search & queries should request data from Elasticsearch. Sync of primary datastore and elasticsearch should be realtime.
+
+- **Use camel casing / kebab case**
+
+- **Use Nouns in URI**
+  REST API’s should be designed with Resources in mind, which can be entities or services, therefore they must always be nouns. For example, instead of /createMember, /updateMember, /deleteMember, use /members
+
+- **Plurals vs Singulars**
+  Preference is always given to plurals but as you know there is no hard and fast rule on defining resource names.
+  For cases where we fetch one resource from a collection of resources with the handle (identifier), we would only prefer using plural
+
+  <RequestUrl icon='✓' iconColor='green' method='GET' methodColor='blue' url='/members/:handle' urlColor='purple' />
+
+  For cases where we are adding one resource with data to our collection of resources, we would handle it as
+  
+  <RequestUrl icon='✓' iconColor='green' method='POST' methodColor='green' url='/members' urlColor='purple' />
+
+- **Define Action with HTTP Verb**
+
+  API’s should only provide nouns for resources and let the HTTP verbs (GET, POST, PUT, DELETE) define the action to be performed on a resource.
+
+  How to use of HTTP verbs:
+
+<MTable 
+  columns={[
+      { title: "Resource", field: "resource" },
+      { title: "GET (read)", field: "get" },
+      { title: "POST (create)", field: "post" },
+      { title: "PUT (update)", field: "put" },
+      { title: "DELETE (delete)", field: "delete" }
+    ]} 
+  data={[
+      { resource: "/members", get: "Returns a list of members", post: "Create a new member", put: "Bulk update of members", delete: "Delete all members" },
+      { resource: "/members/:handle", get: "Returns a specific member", post: "Method not allowed (405)", put: "Update the specified member", delete: "Delete a specific member" }
+    ]}
+  title="empty" 
+  options={{ search: false, paging: false, filtering: false, exportButton: false, showTitle: false, toolbar: false }} />
+
+- **Don’t Misuse Safe Methods** (Idempotency)
+
+  Safe methods are HTTP methods which return the same resource representation irrespective of how many times are called by the client. GET, HEAD, OPTIONS and TRACE methods are defined as safe, meaning they are only intended for retrieving data and should not change a state of a resource on a server. Don’t use GET to delete content, for example:
+
+  <RequestUrl icon='✖' iconColor='red' method='GET' methodColor='blue' url='/members/:handle/delete' urlColor='purple' />
+
+  It’s not like this can’t be implemented, but HTTP specification is violated in such a case.
+  
+  Note: Use HTTP methods according to the action which needs to be performed.
+
+- **Depict Resource Hierarchy Through URI**
+  
+  If a resource contains sub-resources, make sure to depict this in the API to make it more explicit. For example, if a member has traits and we want to retrieve a specific set of traits for the member, API should be defined as:
+
+  <RequestUrl icon='✓' iconColor='green' method='GET' methodColor='blue' url='/members/:handle/traits' urlColor='purple' />
+
+- **Versioning our API**
+
+  A versioning strategy allows clients to continue using the existing REST API and migrate their applications to the newer API when they are ready. There are mainly two ways of achieving this, via header or url.
+
+  <TxtColor txt="** version: *.major.minor" txtColor="red" />
+
+  We recommend embedding the version in the url, example:
+  
+  <RequestUrl icon='✓' iconColor='green' method='POST' methodColor='green' url='/v5/members' urlColor='purple' />
+
+- **Response Representation**
+  
+  POST, PUT or PATCH methods that help create a resource or update fields in a resource, should always return the created / updated resource representation along with an appropriate status code, expose headers,
+  
+  Example curl of When we create a new member trait
+
+  <RequestUrl icon='✓' iconColor='green' method='POST' methodColor='green' url='/v5/members/:handle/traits' urlColor='purple' />
+
+  - **Request Header:**
+    
+    ```js
+    Authorization: <m2m / jwt bearer token>
+    Content-Type: application/json
+    ```
+  
+  - **Request data:**
+
+    ```js
+    [
+        {
+            "categoryName": "Software",
+            "traitId": "software",
+            "traits": {
+                "data": [
+                    {
+                        "softwareType": "Developer Tools",
+                        "name": "VSCode"
+                    }
+                ]
+            }
+        }
+    ]
+    ```
+
+  - **Response Status:**
+
+    ```js
+    200 OK
+    ```
+
+  - **Response Header:**
+
+    ```js
+    Access-Control-Expose-Headers: X-Prev-Page, X-Next-Page, X-Page, X-Per-Page, X-Total, X-Total-Pages, Link
+    Content-Type: application/json; charset=utf-8
+    ```
+
+  - **Response Body:**
+    ```js
+    [
+        {
+            "categoryName": "Software",
+            "traitId": "software",
+            "traits": {
+                "traitId": "software",
+                "data": [
+                    {
+                        "softwareType": "Developer Tools",
+                        "name": "VSCode"
+                    }
+                ]
+            },
+            "createdAt": 1597744935931,
+            "createdBy": 123456
+        }
+    ]
+    ```
+    
+- **Filter URIs**
+
+  Filters are used to operate on results from the current displayed results. Operates on members collection based on the criteria matched.
+
+  We should not create different URIs for fetching resources while filtering parameters.
+
+  We shall be using query parameters defined in the URL for filtering a resource from the server.
+
+  Examples:
+  - **Filtering criteria** like fields to be requested from the member collection
+
+    <RequestUrl icon='✓' iconColor='green' method='GET' methodColor='blue' url='/members?fields=userId,handle,firstName,lastName,status,homeCountryCode' urlColor='purple' />
+    
+    We are validating on the fields provided to the URIs, defined in allowed and secured sections, to handle fields and authorization of resources.
+
+  - **Filtering criteria** like sort to be requested from the member collection
+  
+    <RequestUrl icon='✓' iconColor='green' method='GET' methodColor='blue' url='/members?sort=desc' urlColor='purple' />
+
+    Note: The response would vary based on the authorization level of the request filtering on the allowable fields access.
+
+- **Search URIs**
+
+  Search is used to locate and display a set of results. Gets the member collection based on criteria that matched.
+
+  We should not create different URIs for fetching resources while searching parameters.
+
+  Examples:
+
+  - **Search criteria** with defined query parameters can be used for direct matches requested from the member collection.
+
+    <RequestUrl icon='✓' iconColor='green' method='GET' methodColor='blue' url='/members?handle=upbeat' urlColor='purple' />
+    <RequestUrl icon='✓' iconColor='green' method='GET' methodColor='blue' url='/members?handleLower=upbeat' urlColor='purple' />
+    <RequestUrl icon='✓' iconColor='green' method='GET' methodColor='blue' url='/members?userId=123456' urlColor='purple' />
+    <RequestUrl icon='✓' iconColor='green' method='GET' methodColor='blue' url='/members?handle=upbeat&handleLower=upbeat&userId=123456' urlColor='purple' />
+    
+    These would be optional query parameters and validation of these query parameters passed should be handled. See under api exceptions
+
+  - **Autocomplete endpoints**
+
+    We recommend using elasticsearch autocomplete, autosuggest
+
+  Note: The response would vary based on the authorization level of the request filtering on the allowable fields access.
+
+- **Return object vs array**
+  
+  This is understood by the nature of the service, in a case where we fetch all member
+
+  <RequestUrl icon='✓' iconColor='green' method='GET' methodColor='blue' url='/members' urlColor='purple' />
+
+  the response is expected to be a JSON Array, in places where we fetch for a single member by userId
+
+  <RequestUrl icon='✓' iconColor='green' method='GET' methodColor='blue' url='/members/123456' urlColor='purple' />
+
+  The response is expected to be a JSON Object. Similarly if we make a post call with multiple item creation, the response is expected to be a JSON Array.
+
+  <RequestUrl icon='✓' iconColor='green' method='POST' methodColor='green' url='/v5/members' urlColor='purple' />
+
+  Simple Rule : The endpoint is understood as for multiple then Array, or else return an Object.
+
+- **Security - Authentication & Authorization**
+  
+  **Authentication** is when an entity proves an identity
+
+  **Authorization** is an entirely different concept and in simple terms, Authorization is when an entity proves a right to access.
+
+  - **HTTP Authentication Schemes**
+    
+    Bearer Authentication (also called token authentication) is an HTTP authentication scheme that involves security tokens called bearer tokens. We will be using Auth0 tokens that could be JWT or M2M
+
+    The client must send this token in the Authorization header when making requests to protected resources:
+    
+    ```js
+    Authorization: Bearer <token>
+    ```
+
+  - **Authorization via M2M tokens**
+
+    There are various areas in topcoder or third parties that need to communicate with each other like: service to service, daemon to backend, CLI client to internal service, IoT tools, for such scenarios we use machine to machine.
+
+    These M2M tokens are from Auth0, and based on scopes grant access to our functionality. Here are few scopes that should be adhered to: ‘create:user_profiles’, ‘read:user_profiles’, ‘update:user_profiles’, ‘delete:user_profiles’, ‘all:user_profiles’
+
+
+  - **Authorization via JWT tokens**
+
+    User based security tokens should be supported. Logic filtering of data should be achieved via the user based token and role. At least support for role admin vs user should be designed.
+
+  Note: tokens can be passed via headers.authorization / query.authToken, recommended way is to pass via headers.authorization.
+
+- **You can refer to the following repositories following v5 standards**
+
+  [challenge api](https://github.com/topcoder-platform/challenge-api)
+
+  [member api](https://github.com/topcoder-platform/member-api)

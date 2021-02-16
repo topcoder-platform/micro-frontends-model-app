@@ -1,0 +1,105 @@
+import BusAPI from "../../components/BusAPI"
+import LiveDemo from "../common/live-demo.mdx";
+
+# Publish / Receive Events
+
+We use CloudKarafka (a cloud provider of Kafka services). We have dev and prod environments there which can be used for centralized event management.
+
+## Publish Event via Topcoder Bus Api
+
+<LiveDemo component={<BusAPI />} />
+
+View Kafka messages via [Lauscher Dev](https://lauscher.topcoder-dev.com/) / [Lauscher Prod](https://lauscher.topcoder.com/)
+
+[Bus API Reusable Template - Github Repository](https://github.com/topcoder-platform/model-api-bus-api)
+
+## Receive Event
+
+Under Construction!
+
+View Kafka messages via [Lauscher Dev](https://lauscher.topcoder-dev.com/) / [Lauscher Prod](https://lauscher.topcoder.com/)
+
+## Standard Event payloads
+
+**Format:** JSON
+
+**Structure:**
+
+```json
+{
+  "topic": "string",
+  "originator": "string",
+  "timestamp": "ISO 8601 timestamp",
+  "mime-type": "string",
+  "payload": "object" 
+}
+```
+
+**Topic Structure:**
+
+- "domain"."type"."operation"
+- domains
+  - connect
+  - challenge
+  - user
+  - project
+  - member
+- types
+  - notification
+  - debug
+  - error
+  - action
+- operation
+  - ad hoc by service domain
+
+**Originator Structure:**
+
+Name of service. preferably reflecting the AWS/host service name and/or git repository name. Goal is to be consistent to identify source code that originates the event
+
+**Examples:**
+```json
+{
+  "topic": "connect.notification.project.topic.created",
+  "originator": "tc-project-api",
+  "timestamp": "2018-02-14T00:00:00",
+  "mime-type": "application/json",
+  "payload": {
+    "topicId": "20668",
+    "postId": 71828,
+    "postContent": "Hi Eduardo, The submission phase for this challenge is over",
+    "userId": 23200120,
+    "projectId": "3600",
+    "initiatorUserId": 23200120
+  }
+}
+```
+
+```json
+{
+  "topic": "challenge.notification.create",
+  "originator", "ap-challenge-api"
+  "timestamp": "2018-02-16T00:00:00",
+  "mime-type": "application/json",
+  "payload": {
+     "challenge": {
+        "id": "3001010",
+        "name": "CWD's Bestest Challenge Evar"
+     }
+  }
+}
+```
+
+```json
+{
+  "topic": "forum.notification.post",
+  "originator": "tc-message-api",
+  "timestamp": "2018-02-14T00:00:00",
+  "mime-type": "application/json",
+  "payload": {
+    "project": {
+      "id": "3001010",
+      "post": "Where are my pants?"
+    }
+  }
+}
+```
