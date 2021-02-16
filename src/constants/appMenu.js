@@ -52,17 +52,17 @@ const appMenu = [
         filePath: "/standards",
       },
       {
-        title: "Publish / Receive Events",
-        path: "/model/standards/publish-receive-events",
-        id: "publish-receive-events",
-        fileName: "publish-receive-events.mdx",
-        filePath: "/standards",
-      },
-      {
         title: "DynamoDB Database",
         path: "/model/standards/dynamodb-database",
         id: "dynamodb-database",
         fileName: "dynamodb-database.mdx",
+        filePath: "/standards",
+      },
+      {
+        title: "Publish / Receive Events",
+        path: "/model/standards/publish-receive-events",
+        id: "publish-receive-events",
+        fileName: "publish-receive-events.mdx",
         filePath: "/standards",
       }
     ]

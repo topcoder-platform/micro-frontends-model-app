@@ -11,6 +11,7 @@ const DynamoDB = (props) => {
   let [toggle, setToggle] = useState({ disable: true, buttonTxt: "Try It Out" });
 
   function executeGetClick() {
+    setDynamoDBGetStatusData(prevState => { return Object.assign({}, prevState, { status: " Executing.." }) })
     fetch(config.DYNAMODB_API)
       .then(response => response.json())
       .then(data => {
@@ -26,6 +27,7 @@ const DynamoDB = (props) => {
   }
   
   function executePostClick() {
+    setDynamoPostDBStatusData(prevState => { return Object.assign({}, prevState, { status: " Executing.." }) })
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -36,6 +38,8 @@ const DynamoDB = (props) => {
       .then(data => {
         if (data.hasOwnProperty("id")) {
           setDynamoPostDBStatusData(prevState => { return Object.assign({}, prevState, { status: " Success" }) })
+        } else if (data.hasOwnProperty("message")) {
+          setDynamoPostDBStatusData(prevState => { return Object.assign({}, prevState, { status: " " + data.message }) })
         } else {
           setDynamoPostDBStatusData(prevState => { return Object.assign({}, prevState, { status: " Failed" }) })
         }
@@ -62,32 +66,32 @@ const DynamoDB = (props) => {
   return ( 
     <div>
       <div className={styles.box}>
-        <p>Demonstration of how we can make a get, post api request to fecth data from DynamoDB.</p>
+        <p>Here is a demonstration of how we can make a get, post api request to fecth data from DynamoDB.</p>
         <div className={styles.tryItOut}><button type='button' className={toggle.disable ? styles.tryItOutBtn : styles.tryItOutBtnCancel} onClick={tryItOutClick}>{toggle.buttonTxt}</button></div>
       </div>
-      
-      <h3>Get Request</h3>
+      <h3 className={toggle.disable ? styles.boxTxtDisabled : styles.boxTxt}>Get Request</h3>
+      <p>In the example below you can get all the records from table `cats`</p>
       <div className={styles.execute}><button type='button' className={styles.executeBtn} disabled={toggle.disable} onClick={executeGetClick}>Execute</button></div>
-      {dynamoDBGetStatusData.data.length > 0 &&
+      {dynamoDBGetStatusData.data.length > 0 && !toggle.disable && 
         <MTable 
           columns={dynamoDBGetStatusData.columns}
           data={dynamoDBGetStatusData.data}
-          title="empty" 
-          options={{ search: false, paging: false, filtering: false, exportButton: false, showTitle: false, toolbar: false }} />
+          title="DynamoDB Cats Table" 
+          options={{ search: true, paging: true, filtering: true, exportButton: true, showTitle: false, toolbar: true }} />
       }
       <div className={styles.box}>
-        <div className={styles.boxTxt}>Status : </div>
-        <p>{dynamoDBGetStatusData.status}</p>
+        <div className={toggle.disable ? styles.boxTxtDisabled : styles.boxTxt}>Status : </div>
+        <p className={toggle.disable ? styles.statusTxtDisabled : styles.statusTxt}>{dynamoDBGetStatusData.status}</p>
       </div>
-
-      <h3>Post Request</h3>
-      <label htmlFor="name"><div className={styles.boxTxt}>Name: </div>
+      <h3 className={toggle.disable ? styles.boxTxtDisabled : styles.boxTxt}>Post Request</h3>
+      <p>In the example below you can insert a new record into table `cats`</p>
+      <label htmlFor="name"><div className={toggle.disable ? styles.boxTxtDisabled : styles.boxTxt}>Name: </div>
         <input name="name" id="name" type="text" className={styles.boxTxt} value={dynamoDBPostData.name} disabled={toggle.disable} onChange={(e) => handleChange({ name: e.target.value })} required />
       </label>
       <div className={styles.execute}><button type='button' className={styles.executeBtn} disabled={toggle.disable} onClick={executePostClick}>Execute</button></div>
       <div className={styles.box}>
-        <div className={styles.boxTxt}>Status : </div>
-        <p>{dynamoDBPostStatusData.status}</p>
+        <div className={toggle.disable ? styles.boxTxtDisabled : styles.boxTxt}>Status : </div>
+        <p className={toggle.disable ? styles.statusTxtDisabled : styles.statusTxt}>{dynamoDBPostStatusData.status}</p>
       </div>
     </div>
   )

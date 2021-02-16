@@ -8,6 +8,19 @@
   font-weight: bold;
 }
 
+.boxTxtDisabled{
+  font-weight: bold;
+  color: #6b6b6b;
+}
+
+.statusTxt{
+  color: #2a2a2a;
+}
+
+.statusTxtDisabled{
+  color: #6b6b6b;
+}
+
 .tryItOut{
   text-align: right;
 }
@@ -32,4 +45,13 @@
 
 .execute button{
   font-size: 16px;
+  border: none;
+  padding: 1% 1%;
+  text-align: center;
+  text-decoration: none;
+}
+
+.executeBtn{
+  background-color: green;
+  color: white;
 }

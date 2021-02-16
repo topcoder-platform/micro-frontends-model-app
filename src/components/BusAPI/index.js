@@ -14,6 +14,7 @@ const BusAPI = (props) => {
   }, [])
 
   function executeClick() {
+    setBusStatusData(prevState => { return Object.assign({}, prevState, { status: " Executing.." }) })
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -24,6 +25,8 @@ const BusAPI = (props) => {
       .then(data => {
         if (data.hasOwnProperty("id")) {
           setBusStatusData(prevState => { return Object.assign({}, prevState, { status: " Success" }) })
+        } else if (data.hasOwnProperty("message")) {
+          setBusStatusData(prevState => { return Object.assign({}, prevState, { status: " " + data.message }) })
         } else {
           setBusStatusData(prevState => { return Object.assign({}, prevState, { status: " Failed" }) })
         }
@@ -54,16 +57,16 @@ const BusAPI = (props) => {
         <div className={styles.tryItOut}><button type='button' className={toggle.disable ? styles.tryItOutBtn : styles.tryItOutBtnCancel} onClick={tryItOutClick}>{toggle.buttonTxt}</button></div>
         <p>In the example below you can provide the name and description to kafka for topic 'test.new.bus.events'</p>
       </div>
-      <label htmlFor="name"><div className={styles.boxTxt}>Name: </div>
+      <label htmlFor="name"><div className={toggle.disable ? styles.boxTxtDisabled : styles.boxTxt}>Name: </div>
         <input name="name" id="name" type="text" className={styles.boxTxt} value={busData.name} disabled={toggle.disable} onChange={(e) => handleChange({ name: e.target.value })} required />
       </label>
-      <label htmlFor="description"><div className={styles.boxTxt}>Description: </div>
+      <label htmlFor="description"><div className={toggle.disable ? styles.boxTxtDisabled : styles.boxTxt}>Description: </div>
         <input name="description" id="description" className={styles.boxTxt} type="text" value={busData.description} disabled={toggle.disable} onChange={(e) => handleChange({ description: e.target.value })} required />
       </label>
-      <div className={styles.execute}><button type='button' disabled={toggle.disable} onClick={executeClick}>Execute</button></div>
+      <div className={styles.execute}><button type='button' disabled={toggle.disable} className={styles.executeBtn} onClick={executeClick}>Execute</button></div>
       <div className={styles.box}>
-        <div className={styles.boxTxt}>Status : </div>
-        <p>{busStatusData.status}</p>
+        <div className={toggle.disable ? styles.boxTxtDisabled : styles.boxTxt}>Status : </div>
+        <p className={toggle.disable ? styles.statusTxtDisabled : styles.statusTxt}>{busStatusData.status}</p>
       </div>
     </div>
   )

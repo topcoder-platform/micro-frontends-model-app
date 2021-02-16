@@ -3,9 +3,27 @@ import LiveDemo from "../common/live-demo.mdx";
 
 # Publish / Receive Events
 
-We use CloudKarafka (a cloud provider of Kafka services). We have dev and prod environments there which can be used for centralized event management.
+Topcoder use CloudKarafka (a cloud provider of Kafka services). Topcoder has multiple environments like dev, prod, etc.. which are used for centralized event management.
+
+Topcoder has a wrapper for communicating with Kafka, the wrapper is [Topcoder Bus API](https://github.com/topcoder-platform/tc-bus-api-wrapper). 
 
 ## Publish Event via Topcoder Bus Api
+
+We will be procesing and publishing the following json payload, to kafka for Topic `test.new.bus.events`
+
+```json
+{
+  topic: 'test.new.bus.events',
+  originator: 'model-api-bus-api',
+  timestamp: '2021-02-16T07:11:11.923Z',
+  'mime-type': 'application/json',
+  payload:{
+    id: 'dbaa34c5-787a-4701-850c-5c99b76da675',
+    name: 'Publish Event Name',
+    description: 'This is event to publish event via TC Bus API'
+  }
+}
+```
 
 <LiveDemo component={<BusAPI />} />
 
