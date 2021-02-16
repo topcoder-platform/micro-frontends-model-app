@@ -1,0 +1,18 @@
+import DynamoDB from "../../components/DynamoDB"
+import LiveDemo from "../common/live-demo.mdx";
+import Swagger from "../../components/Swagger"
+import dynamoDBV5Swagger from "../../assets/openapi/dynamodb-v5-swagger-openapi3.yaml";
+
+# DynamoDB Database
+
+Most of Topcoder intenal data is stored on Amazon DynamoDB.
+We recommends using Amazon DynamoDB as its about fully managed proprietary NoSQL database service that supports key-value and document data structures and is offered by Amazon.com as part of the Amazon Web Services portfolio.
+
+Here is a topcoder starter for communicating with dynamodb
+[Dynamodb Reusable Template - Github Repository](https://github.com/topcoder-platform/model-api-dynamodb)
+
+<div><LiveDemo component={<DynamoDB />} /></div>
+
+## SwaggerUI of Model API DynamoDB
+
+<div><Swagger swaggerSpec={dynamoDBV5Swagger} /></div>

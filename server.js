@@ -23,4 +23,4 @@ app.get('/', function (req, res) {
 
 const PORT = process.env.PORT || 8504;
 app.listen(PORT);
-console.log(`App is hosted on port ${PORT}.`); // eslint-disable-line no-console
+console.log(`App is hosted on port ${PORT}.`);

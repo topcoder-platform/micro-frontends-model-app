@@ -65,6 +65,10 @@ module.exports = (webpackConfigEnv, argv) => {
           test: /\.mdx?$/,
           use: ["babel-loader", "@mdx-js/loader"],
         },
+        {
+          test: /\.yaml$/,
+          use: 'js-yaml-loader',
+        },
       ],
     },
     resolve: {
@@ -76,6 +80,11 @@ module.exports = (webpackConfigEnv, argv) => {
       },
     },
     plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          APPENV: JSON.stringify(process.env.APPENV),
+        },
+      }),
       new webpack.ProvidePlugin({
         Buffer: ["buffer", "Buffer"],
       }),
