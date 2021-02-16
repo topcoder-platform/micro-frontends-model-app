@@ -68,8 +68,22 @@ const appMenu = [
     ]
   },
   {
-    title: "Micro Frontends Features",
+    title: "Micro Frontends",
     children: [
+      {
+        title: "What is Micro frontend?",
+        path: "/model/micro-frontends/what-is-mfe",
+        id: "what-is-mfe",
+        fileName: "what-is-mfe.mdx",
+        filePath: "/micro-frontends",
+      },
+      {
+        title: "Deployment Architecture",
+        path: "/model/micro-frontends/deployment-architecture-mfe",
+        id: "deployment-architecture-mfe",
+        fileName: "deployment-architecture-mfe.mdx",
+        filePath: "/micro-frontends",
+      },
       {
         title: "Authentication",
         path: "/model/micro-frontends/auth-demo",

@@ -1,0 +1,99 @@
+import BasicGraph from "../../components/BasicGraph"
+
+## Deployment Architecture
+
+export const elements = [
+  { id: '1', data: { label: 'Git Repositories' }, style: {
+      background: 'transparent',
+      color: 'black',
+      border: '4px solid orange',
+      width: 600,
+      height: 130,
+      'font-weight': 'bold',
+      'text-align': 'end'
+    }, position: { x: 95, y: 5 }
+  },
+  { id: '2', data: { label: 'MicroApplication A' },
+    style: {
+      background: 'orange',
+      color: 'black',
+      border: '1px solid orange',
+      width: 150,
+      height: 34
+    }, position: { x: 160, y: 35 } },
+  { id: '3', data: { label: 'MicroApplication B' },
+    style: {
+      background: 'orange',
+      color: 'black',
+      border: '1px solid orange',
+      width: 150,
+      height: 34
+    }, position: { x: 320, y: 35 } },
+  { id: '4', data: { label: 'nth MicroApplication' },
+    style: {
+      background: 'lightyellow',
+      color: 'black',
+      border: '1px solid orange',
+      width: 150,
+      height: 34
+    }, position: { x: 525, y: 35 } },
+  { id: 'e3-4', source: '3', target: '4', label: 'nth', animated: true },
+  { id: '5', data: { label: 'MicroFrame' },
+    style: {
+      background: 'orange',
+      color: 'black',
+      border: '1px solid orange',
+      width: 150,
+      height: 34
+    }, position: { x: 320, y: 90 } },
+  { id: '6', data: { label: 'CircleCI (CI/CD)' }, style: {
+      background: 'transparent',
+      color: 'black',
+      border: '4px solid orange',
+      width: 600,
+      height: 115,
+      'font-weight': 'bold',
+      'text-align': 'end'
+    }, position: { x: 95, y: 207 }
+  },
+  { id: '7', data: { label: 'Listen to Individual Git Repository' },
+    style: {
+      background: 'orange',
+      color: 'black',
+      border: '1px solid orange',
+      width: 150,
+      height: 48
+    }, position: { x: 130, y: 240 } },
+  { id: '8', data: { label: 'Build the individual Repositories' },
+    style: {
+      background: 'orange',
+      color: 'black',
+      border: '1px solid orange',
+      width: 150,
+      height: 48
+    }, position: { x: 320, y: 240 } },
+  { id: '9', data: { label: 'Deploy to AWS' },
+    style: {
+      background: 'orange',
+      color: 'black',
+      border: '1px solid orange',
+      width: 150,
+      height: 48
+    }, position: { x: 510, y: 240 } },
+  { id: '10', data: { label: 'Micro Frontend (AWS ECS)' }, style: {
+      background: 'transparent',
+      color: 'black',
+      border: '4px solid orange',
+      width: 600,
+      height: 48,
+      'font-weight': 'bold',
+      'text-align': 'end',
+      'font-size': '18px'
+    }, position: { x: 95, y: 405 }
+  },
+  { id: 'e1-6', source: '1', target: '6', arrowHeadType: 'arrowclosed', animated: false, style: { stroke: 'orange', 'stroke-width': '5px' } },
+  { id: 'e6-10', source: '6', target: '10', arrowHeadType: 'arrowclosed', animated: false, style: { stroke: 'orange', 'stroke-width': '5px' } },
+];
+export const graphStyles = { width: '100%', height: '500px' };
+
+<BasicGraph elements={elements} graphStyles={graphStyles} />
