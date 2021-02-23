@@ -64,6 +64,13 @@ const appMenu = [
         id: "publish-receive-events",
         fileName: "publish-receive-events.mdx",
         filePath: "/standards",
+      },
+      {
+        title: "PostgreSQL Database",
+        path: "/model/standards/postgresql-database",
+        id: "postgresql-database",
+        fileName: "postgresql-database.mdx",
+        filePath: "/standards",
       }
     ]
   },
