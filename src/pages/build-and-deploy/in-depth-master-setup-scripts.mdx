@@ -1,0 +1,175 @@
+import MTable from "../../components/MTable"
+import Copyright from "../common/copyright.mdx";
+import image1 from "../../assets/pages/build-and-deploy-in-depth-master-setup-scripts-1.png";
+import image2 from "../../assets/pages/build-and-deploy-in-depth-master-setup-scripts-2.png";
+import image3 from "../../assets/pages/build-and-deploy-in-depth-master-setup-scripts-3.png";
+import image4 from "../../assets/pages/build-and-deploy-in-depth-master-setup-scripts-4.png";
+import image5 from "../../assets/pages/build-and-deploy-in-depth-master-setup-scripts-5.png";
+import image6 from "../../assets/pages/build-and-deploy-in-depth-master-setup-scripts-6.png";
+import image7 from "../../assets/pages/build-and-deploy-in-depth-master-setup-scripts-7.png";
+
+# In Depth Masterscript & Setup Script
+
+## Synopsis
+
+  This document helps usage of Setupscr.sh for creating or updating or validating `application and deployment variables in JSON` format.  Though Masterscript and Setupscr script share the same github repo, usage of Setupscr script is `independent` from main Masterscript execution. Usage of this script `completely optional` and it just complements JSON file management and `reduce` deployment error due to application variables format or values.
+
+  Also, this document shares very important `deployment` steps at `config.yml` file.
+
+  Refer [Concepts & Overview](/model/build-and-deploy/master-script-concept-execution-process) for Masterscript understanding.
+
+## Prerequisite 
+  
+  Install the following at your system.
+
+  ```js
+    curl -O https://bootstrap.pypa.io/get-pip.py
+    brew install python3 (for mac)
+    python3 get-pip.py --user
+    pip3 install json-spec
+    install jq and json.
+  ```
+
+## Key Steps
+
+### Download Setup script
+
+  * Clone the following Git Repo at your local system from this link [Masterscript Release V1.0](https://github.com/topcoder-platform/tc-deploy-scripts.git)
+  * Change Directory to setup_ms folder. (cd setup_ms)
+  * Give execute permission chmod +x setupscr..sh
+  * Execute script ./setupscr.sh and choose the deployment options.
+    * This step shall capture your AWS Deployment Options
+    * Helps you create App Specific Environment variables from Scratch
+    * Validate or Amend already created environment file.
+
+### Validate and Upload variables file(s) to S3.
+
+  Here there are 2 options before uploading to S3.
+
+  * Beginners : If you have followed step 1 point 4 i, e created variables files from Setup script, this will validate and create variable file hence Goto Step 6.
+  * Experienced : If you are an experienced user and have pre-created json variables files. Then execute ./setupscr.sh → choose option 3 - validate variable JSON file
+  * Note : Adhere to ECS or EBS schema. Refer Sample file  at  /variable_file_template/sample_ecs_var.json and  Schema file ../setup_ms/template/ECS/schema_template.json ).
+  * The Script will guide next steps along with relevant inputs for updating .config.yml file
+  * If your input JSON files adheres to schema and value format, "Input file json schema is valid" and "json syntax value valid"  is displayed along with Key/Values of your env.
+  * Login to Dev or Prod AWS Console.
+    * Upload validated json file to S3 
+    * bucket tc-platform-< dev/prod>
+    * securitymanager folder.
+
+## Deployment Steps
+
+### Update circleci environment variable(s)
+
+  * Navigate to CircleCI app → < your project> → Setting →  environment variables.
+  * Update AWS Environment specific credentials
+
+<MTable 
+  columns={[
+      { title: "DEV EXAMPLE", field: "devexample" },
+      { title: "PROD EXAMPLE", field: "prodexample" }
+    ]} 
+  data={[
+      { devexample: "1. DEV_AWS_ACCOUNT_ID = 12345678", prodexample: "1. PROD_AWS_ACCOUNT_ID = 345678900" },
+      { devexample: "2. DEV_AWS_ACCESS_KEY_ID = xxxxxxx", prodexample: "2. PROD_AWS_ACCESS_KEY_ID = xuxxxxxx" },
+      { devexample: "3. DEV_AWS_SECRET_ACCESS_KEY = yyyyyyyyyy", prodexample: "3. PROD_AWS_SECRET_ACCESS_KEY = yoyyyyyyyyy" },
+      { devexample: "4. DEV_AWS_REGION = us-east-1", prodexample: "4. PROD_AWS_REGION = us-east-1" },
+    ]}
+  title="empty" />
+
+### Update .circleci/config.yml at < app> github repo
+
+  * Navigate to your app Git Repo, Append the following as-is at .circleci/config.yml "Deployment" Section
+
+  ```js
+    deploy:
+      name: Running MasterScript
+      command: |
+        git clone --branch master https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+        cp ./../buildscript/master_deply.sh .
+        ./master_deply.sh -d ECS -e DEV -t $CIRCLE_SHA1 -s zebra
+  ```
+
+  For ECS FARGATE deploy type add option -p FARGATE
+
+  ```js
+    ./master_deply.sh -d ECS -e DEV -t $CIRCLE_SHA1 -s zebra -p FARGATE
+  ```
+
+  For common variables file var-common.json. Example option shown below, omit .json file extn
+
+  ```js
+    ./master_deply.sh -d ECS -e DEV -t $CIRCLE_SHA1 -s zebra,var-common -p FARGATE
+  ```
+
+  * Validate for other project specific need, language etc & check-in. Update branch details.
+  
+  * Once .config.yml is committed, the masterscipt automatically triggers. Monitor circleci.       
+
+  Note : Refer ../circleci_template/Sample-Nodejs.yml. Search "msadd2" to add line.
+
+### Update masterscript entry at config.yml
+
+  ```js
+    # Caching node modules.
+      key: docker-tc-notify-{{ checksum "package-lock.json" }}
+      path:
+        - node_modules
+
+    # Deployment.
+    - run
+      name: Installing AWS client
+      command: |
+        apk add --no-cache jq py-pip sudo
+        sudo pip install awscli --upgrade
+
+    - deploy:
+      name: MasterrScript
+      command: |
+        git clone --branch master https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+        cp ./../buildscript/master_deploy_v4.2.sh .
+        ./master_deploy_v4.2 -d ECS -e DEV -t $CIRCLE_SHA1 -s zebra
+  ```
+
+## Video demo
+
+  Please refer [MasterScript Release V1.0](https://drive.google.com/file/d/19oGwFm6nNzQeOnM_l79MfdvwcHzWKfsU/view?usp=sharing)
+
+## FAQ : How, what and why
+
+  [Masterscript & Setup Script](/model/build-and-deploy/master-setup-scripts)
+
+## Setupscr.sh screen shots
+
+  * Create new aws env and app env
+
+  <img src={image1} height="450" />
+
+  * Modify/Add/List/Delete existing variable file
+
+  <img src={image2} height="450" />
+
+  * Validate existing JSON File
+
+  <img src={image3} height="225" />
+
+  * Validation and Suggestion
+
+  <img src={image4} height="125" />
+
+  <img src={image5} height="125" />
+
+  <img src={image6} height="450" />
+
+  * Deployment steps - at .circleci/config.yml adding masterscript steps.
+
+  <img src={image7} height="450" />
+
+##  References
+
+[Master Script Concept & Execution Process](/model/build-and-deploy/master-script-concept-execution-process)
+
+[Master & Setup Scripts](/model/build-and-deploy/master-setup-scripts)
+
+[Masterscript Release V1.0 - TC Deploy Scripts](https://github.com/topcoder-platform/tc-deploy-scripts.git)
+
+<Copyright />

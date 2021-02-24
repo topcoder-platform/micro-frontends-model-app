@@ -62,6 +62,13 @@ module.exports = (webpackConfigEnv, argv) => {
           }
         },
         {
+          test: /\.png$/,
+          exclude: [/node_modules/],
+          use: {
+            loader: require.resolve("file-loader", { paths: [__dirname] }),
+          }
+        },
+        {
           test: /\.mdx?$/,
           use: ["babel-loader", "@mdx-js/loader"],
         },
