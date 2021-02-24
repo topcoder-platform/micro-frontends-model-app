@@ -1,0 +1,219 @@
+import BasicGraph from "../../components/BasicGraph"
+import MTable from "../../components/MTable"
+import Copyright from "../common/copyright.mdx";
+
+# Logging Standard
+
+## Objective  
+
+  To define generic logging standards for new and existing  application micro services.
+  
+## Audience
+
+  For development team
+
+
+export const elements = [
+  { id: '1', data: { label: 'Application' }, style: {
+      background: 'blue',
+      color: 'white',
+      border: '1px solid blue',
+      width: 200,
+      height: 50,
+      'font-size': '24px'
+    }, position: { x: 65, y: 20 }
+  },
+  { id: '2', data: { label: 'Log Origination' },
+    style: {
+      background: 'green',
+      color: 'white',
+      border: '1px solid green',
+      width: 200,
+      height: 50,
+      'font-size': '24px'
+    }, position: { x: 65, y: 200 } },
+  { id: '3', data: { label: 'Logging Standards' },
+    style: {
+      background: 'lightgray',
+      color: 'black',
+      border: '1px solid lightgray',
+      width: 250,
+      height: 230,
+      'font-size': '24px'
+    }, position: { x: 320, y: 20 } },
+  { id: '4', data: { label: 'Logging Level' },
+    style: {
+      background: 'lightgray',
+      color: 'black',
+      border: '1px solid black',
+      width: 200,
+      height: 35
+    }, position: { x: 345, y: 60 } },
+    { id: '5', data: { label: 'Logging Framework' },
+    style: {
+      background: 'lightgray',
+      color: 'black',
+      border: '1px solid black',
+      width: 200,
+      height: 35
+    }, position: { x: 345, y: 105 } },
+    { id: '6', data: { label: 'Logging Format' },
+    style: {
+      background: 'lightgray',
+      color: 'black',
+      border: '1px solid black',
+      width: 200,
+      height: 35
+    }, position: { x: 345, y: 150 } },
+    { id: '7', data: { label: 'Logging Context' },
+    style: {
+      background: 'lightgray',
+      color: 'black',
+      border: '1px solid black',
+      width: 200,
+      height: 35
+    }, position: { x: 345, y: 200 } },
+  { id: 'e1-2', source: '1', target: '2', arrowHeadType: 'arrowclosed', animated: false, style: { 'stroke-width': '5px' } },
+  { id: 'e3-2', source: '3', target: '2', arrowHeadType: 'arrowclosed', animated: true, style: { 'stroke-width': '5px' } },
+];
+export const graphStyles = { width: '100%', height: '265px' };
+
+<BasicGraph elements={elements} graphStyles={graphStyles} />
+
+## Log Origination
+
+  Log origination is usually from application (frontend/middleware/processor/ etc). It's important to understand what and when to be logged.
+
+
+## Logging Level
+
+- “What” to log is usually defined as “log level” and  default provided by 3rd party log libraries. 
+
+  - Most commonly developer interchange debug, info and Warn logging which isn’t the best practice. 
+
+  - Turning off debug loggers during production deployment will improve app performance.
+
+- “When” to log  part is common sense approach.
+
+<MTable 
+  columns={[
+      { title: "Log Level", field: "logLevel" },
+      { title: "App Example", field: "appExample" },
+      { title: "'When' to use", field: "whenToUse" }
+    ]} 
+  data={[
+      { logLevel: "Debug", appExample: "at line after pg init", whenToUse: "Use only during development stage" },
+      { logLevel: "Info", appExample: "DB successfully connected", whenToUse: "Dev and prod both, Use if necessary" },
+      { logLevel: "Warn", appExample: "Retry limit reached", whenToUse: "optional" },
+      { logLevel: "Error", appExample: "Duplicate pk violation", whenToUse: "Dev and prod both, Must be logged" }
+    ]}
+  title="empty" />
+
+## Logging Framework
+
+  3rd party Libraries  :  Recommendation 
+
+<MTable 
+  columns={[
+      { title: "Language", field: "language" },
+      { title: "3rd Party Library", field: "partyLibrary" }
+    ]} 
+  data={[
+      { language: "Nodejs", partyLibrary: "Winston" },
+      { language: "Java", partyLibrary: "log4j" }
+    ]}
+  title="empty" />
+
+  Standards for application name : The following standards have to be adhered at the source of log origination. 
+
+## Logging Format
+
+  Recommends the following log format.
+
+  Standard Format : Text formatting
+
+  - Format - [ISO8601 Time] component LogLevel : log message 
+
+  - example1 - [2019-05-29T11:36:46.620Z] DBComponent INFO  : connected to postgres
+
+  Refer Annexure for detailed format
+
+## Logging Context 
+  
+  An optional feature that’s recommended. A logging context is extension of logging format and provides  context and uniqueness, it expedites troubleshooting and tracking.   For example 
+
+  - Context refers to the sub-component/functions. i,e It refers to what log trying to say with reference to whom ?
+  - Uniqueness refers to the unique id of that particular log/transaction. This helps in tracking exact transaction issues. Ignore if uniqueness or unique id is not available.
+  - Note that Log context and uniqueness is optional
+  - The table below provides context and uniqueness example.
+
+<MTable 
+  columns={[
+      { title: "Component", field: "component" },
+      { title: "Context", field: "context" },
+      { title: "Uniqueness", field: "uniqueness" }
+    ]} 
+  data={[
+      { component: "DB", context: "DBUpdate", uniqueness: "PK or Uniq ID - 1234" },
+      { component: "Kafka", context: "KafkaPush", uniqueness: "Retry Count - 5" },
+      { component: "DB", context: "DBSync", uniqueness: "payloadid - 12" }
+    ]}
+  title="empty" />
+
+  **Best Practice**
+
+  - Be precise. Stack trace, dumps of error, multi-line log message not recommended
+
+  - Prefer handling the error than dumping error trace.
+
+## Logging Standard - Summary
+
+  - Format 1
+    
+    [ISO8601 Time] component  LogLevel :   log message 
+    
+    example1
+    ```js
+    [2019-05-29T11:36:46.620Z] DBComponent INFO  : connected to postgres
+    ```
+
+  - Format 2
+  
+    [ISO8601 Time] component context LogLevel : uniqueness  log message 
+
+    example 2 ( context & uniqueness)
+    ```js
+    [2019-05-29T11:36:46.620Z] db_migration  dbupdate ERROR  :  payloadid : 12345 “user” update reached max limit
+    ```
+## Annexure : Log Attribute
+
+  ```js
+  [ISO8601 Time] component context logstatus : uniqueness  log message 
+
+  [2019-05-29T11:36:46.620Z] tc-connect kafkapush ERROR :  payloadid : 12345   error while kafka push
+  ```
+  
+<MTable 
+  columns={[
+      { title: "Log Attribute", field: "logAttribute" },
+      { title: "Description", field: "description" },
+      { title: "Example", field: "example" },
+      { title: "Required", field: "required" }
+    ]} 
+  data={[
+      { logAttribute: "Date and time", description: "ISO8601, Should be enclosed in bracket", example: "2019-05-29T11:36:46.620Z https://en.wikipedia.org/wiki/ISO_8601", required: "Mantatory" },
+      { logAttribute: "Component", description: "Component is log origination app name", example: "tc-connect", required: "Mantatory" },
+      { logAttribute: "Context", description: "Context is subcomponent i,e which part of the app the log originating", example: "kafkapush", required: "Optional" },
+      { logAttribute: "LogLevel", description: "Logstatus all in caps", example: "ERROR", required: "Mantatory" },
+      { logAttribute: "Uniqueness", description: "uniqueness of the log", example: "payloadid : 12345", required: "Optional" },
+      { logAttribute: "Log message", description: "Log message", example: "Error while kafka push", required: "Mantatory" }
+    ]}
+  title="empty" />
+
+- All attribute has to follow space delimiter
+
+- Log Status should follow space delimiter followed by semicolon
+
+- Date attribute  should be enclosed in square bracket
+
+<Copyright />

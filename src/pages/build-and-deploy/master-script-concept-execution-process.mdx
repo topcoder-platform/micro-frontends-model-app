@@ -1,0 +1,382 @@
+import MTable from "../../components/MTable"
+import Copyright from "../common/copyright.mdx";
+import image1 from "../../assets/pages/master-script-concept-execution-process-1.png";
+import image2 from "../../assets/pages/master-script-concept-execution-process-2.png";
+import image3 from "../../assets/pages/master-script-concept-execution-process-3.png";
+import image4 from "../../assets/pages/master-script-concept-execution-process-4.png";
+import image5 from "../../assets/pages/master-script-concept-execution-process-5.png";
+import image6 from "../../assets/pages/master-script-concept-execution-process-6.png";
+import image7 from "../../assets/pages/master-script-concept-execution-process-7.png";
+import image8 from "../../assets/pages/master-script-concept-execution-process-8.png";
+import image9 from "../../assets/pages/master-script-concept-execution-process-9.png";
+
+# Master Script Concept & Execution Process 
+
+  Release V1.4.1
+
+## Masterscript Release Tracker
+
+<MTable 
+  columns={[
+      { title: "", field: "number" },
+      { title: "Version", field: "version", cellStyle: { whiteSpace: "nowrap" }, headerStyle: { whiteSpace: "nowrap" } },
+      { title: "1.0", field: "10" },
+      { title: "1.1", field: "11" },
+      { title: "1.3", field: "13" },
+      { title: "1.4", field: "14" },
+      { title: "1.4.1", field: "141" },
+      { title: "1.4.2", field: "142" }
+    ]} 
+  data={[
+      { number: "1", version: "ECS - EC2", 10: "Yes", 11: "No", 13: "Yes", 14: "", 141: "", 142: "" },
+      { number: "2", version: "ECS - Fargate", 10: "No", 11: "Yes", 13: "Yes", 14: "", 141: "", 142: "" },
+      { number: "3", version: "EBS", 10: "Yes", 11: "Yes", 13: "Yes", 14: "", 141: "", 142: "" },
+      { number: "4", version: "Cloudfront", 10: "Yes", 11: "Yes", 13: "Yes", 14: "", 141: "", 142: "" },
+      { number: "5", version: "Lambda - SLS", 10: "No", 11: "Yes", 13: "Yes", 14: "", 141: "", 142: "" },
+      { number: "6", version: "STS", 10: "No", 11: "No", 13: "Yes", 14: "", 141: "", 142: "" },
+      { number: "7", version: "Docker Compose (ECS-CLI)", 10: "", 11: "", 13: "", 14: "Yes", 141: "", 142: "" },
+      { number: "8", version: "Deployment Timeout Configuration", 10: "", 11: "", 13: "", 14: "Yes", 141: "", 142: "" },
+      { number: "9", version: "ECS Container Role Map", 10: "", 11: "", 13: "", 14: "Yes", 141: "", 142: "" },
+      { number: "10", version: "EBS Port Mapping Feature", 10: "", 11: "", 13: "", 14: "Yes", 141: "", 142: "" },
+      { number: "11", version: "ECS Fargate CPU size", 10: "", 11: "", 13: "", 14: "", 141: "Yes", 142: "" },
+      { number: "12", version: "Variable File format Validation Check", 10: "", 11: "", 13: "", 14: "", 141: "", 142: "" },
+      { number: "13", version: "Special Character interpretation Issue on Build Env file", 10: "", 11: "", 13: "", 14: "", 141: "", 142: "" },
+      { number: "14", version: "Globing character issue in Task Definition", 10: "", 11: "", 13: "", 14: "", 141: "", 142: "" },
+    ]}
+  title="empty" />
+
+#### Release V1.4.2 - Feb-2020
+
+- Variable File format Validation Check 
+- Special Character interpretation Issue on Build Env file
+- Globing character issue in Task Definition
+
+#### Release V1.4.1  - Jul-2019
+
+- Fargate CPU Size change Bug Fix
+
+#### Release V1.4  - May-2019
+
+- Docker Compose
+- Deployment Timeout Configuration
+- ECS Container Role Map
+- EBS Port Mapping Feature
+
+#### Release V1.3  - Feb-2019
+
+- Environment and Deployment variables segregation at S3 
+- STS - Auth0 for Deployment 
+- Limited or No CircleCi environment dependency. Use of Global Env storage
+- Note: V1.3 isn't backward compatible
+
+#### Release V1.1
+
+- Lambda deployment support for Serverless (SLS) framework.
+- Stream-lining of Masterscript older version and deployment.
+
+#### Release V1.0 - Oct-2018
+
+- ECS EC2, ECS Fargate, EBS & Cloudfront Deployment support.
+- Support Application and Deploy variables at S3.
+- Documentation  @ Atlassian with use-case study.
+
+## 1. Concepts
+
+### a. Concept
+
+  - Masterscript abstracts deployment of ECS, EBS and Cloud front AWS services. It allows user to focus on Development, Build and Test. The complexity of deployment targeting different AWS services like ECS, EBS has been handled by Masterscript.
+  - Further, user need not worry about updating app variables at circleci, a simple json files updates and upload to AWS S3 is sufficient. Deployment complexity like ECS managing task container, definition, Docker Image pushing to ECR are handled by Masterscript.
+  - Maserscript doesn't replace existing CI/CD process but takes care of infra deployment only.  
+  - Masterscript recommends using new app deployment for EBS, ECS or Cloudfront. Existing app or backward compatibility is also supported but needs Devops support
+
+### b. Current vs Master Script process
+
+<img src={image1} height="450" />
+
+### c. Input & Output Overview
+
+<img src={image2} height="516" />
+
+  * The above diagram shares the input and output process for Masterscript.
+  * The very first step is to capture your Application variables and AWS infra deployment variables into json format file and upload to S3. This is end-user or person who is owner of application responsibility. (Reference : Diagram marked as 1)
+  * End-user never interacts directly or executes Masterscript. (Reference : Diagram in the middle Masterscript Github Code, this is hidden process).
+  * Masterscript just embeds into your application existing Github/Circleci deployment process. (Reference : Diagram marked as 2)
+  * End-user doesn't need to download a Masterscript for execution but user has to provide the following 2 entries at .circleci/config.yml file
+    * Masterscript Github link
+    * Deploy type and their respective parameter.
+  * Post step 5 update, the commit will automatically trigger (the Build) and Deploy process. The Deploy process is now handled by Masterscript and based on AWS infra variable declared at uploaded S3 file the application will be deployed to the respective AWS services. This step is completely automated process. (Reference : Diagram Output section (Deployment))
+  * Note that Build process is user dependent and independent of Masterscript. 
+
+### d. Masterscript Scope
+
+  Includes
+  - Support for ECS, EBS & Cloudfront deployment at .circleci/config.yml
+  - Support app variables to be captured in json format, file validation and upload to S3.
+  - ECS - task definition update,service,container update environment mapping, logging
+
+  Excludes
+  - Existing process of creating & Integrating with Github/Circleci  (which remains same)
+  - Doesn’t support automation of json file upload to S3. This is manual step.
+  - Build.sh - integration of app in Docker or Docker compose format. As this process is discretion of developer and each of them has their own style of creating. Hence, custom script to be written or updated as per need.
+  - Respective AWS Infrastructure services and it’s related dependency (ECS, EBS or Cloudfront). This has to be created at console before deployment.
+
+### e. Process Workflow 
+
+<img src={image3} height="1010" />
+
+## 2. Execution
+
+### a. Masterscript Prerequisite
+
+  - At AWS, create  necessary Infrastructure like Cluster, Services, Task Definition and ECR
+  - (Optional Autoscaling, ALB and target group as per your app need.
+  - This holds for EBS and cloud front if Deployment type differs.
+  - Note: Please note down all Infra details and 
+  - DO NOT update AWS Access and AWS Secret  keys inside the JSON file
+
+  Example:
+  ```js
+    "awsdeployvar": {
+      "AWS_REPOSITORY": "tc-somethings",
+      "AWS_ECS_CLUSTER": "tc-somethings",
+      "AWS_ECS_SERVICE": "something-something-svc",
+      "AWS_ECS_TASK_FAMILY": "tc-somethings-task",
+      "AWS_ECS_CONTAINER_NAME": "tc-somethings-container",
+      "AWS_ECS_PORTS": "0:80:tcp"
+    }
+  ```
+
+  * Create a JSON file with all infra & application related variables.
+    * JSON file Sample format [appvar](https://github.com/topcoder-platform/tc-deploy-scripts/blob/master/template/variable_file_template/sample_ecs_deployvar.json)
+    * JSON file Sample format [deployvar](https://github.com/topcoder-platform/tc-deploy-scripts/blob/master/template/variable_file_template/sample_ecs_appvar.json)
+
+  * Upload JSON file to S3 bucket.
+   * [Amazon S3](https://s3.console.aws.amazon.com/s3/home?region=us-east-1) → [tc-platform-dev](https://s3.console.aws.amazon.com/s3/buckets/tc-platform-dev/?region=us-east-1&tab=overview)/[securitymanager](https://s3.console.aws.amazon.com/s3/)
+
+  * Docker Images (via Docker Build).
+    * [Build.sh Sample format](https://github.com/topcoder-platform/tc-notifications/blob/dev_mstest_v2/build.sh)
+  
+  * AWS Account, keys and ECR repository keys updated at Circleci. (config.yml needs to be created)
+    * Sample CircleCi variables
+
+  * Embed Masterscript details at config.yml
+    * [Sample config.yml](https://github.com/topcoder-platform/tc-notifications/blob/dev_mstest_v2/.circleci/config.yml), refer "deploy" section
+
+<MTable 
+  columns={[
+      { title: "Options", field: "option" },
+      { title: "", field: "short", cellStyle: { whiteSpace: "nowrap" }, headerStyle: { whiteSpace: "nowrap" } },
+      { title: "Description", field: "description" }
+    ]} 
+  data={[
+      { option: "-d", short: "M - ALL", description: "Deployment type (ECS/EBS/CFRONT/LAMBDA) " },
+      { option: "-e", short: "M - ALL", description: "Deployment Physical environment (DEV/QA/PROD)" },
+      { option: "-t", short: "M - ECS/EBS", description: "ECS image tag " },
+      { option: "-s", short: "M - ECS/LAMBDA", description: "Application variable file name which uploaded in S3 bucket without using json extension with multiple name using comma separated" },
+      { option: "-p", short: "O - ECS", description: "If deployment type is fargate ( -p FARGATE)" },
+      { option: "-m", short: "O - ECS", description: "If you want deployment executed through ECSCLI, please provide this option " },
+      { option: "-i", short: "O - ECS", description: "If you are not following the standard ECR repository tag format, please provide the image name" },
+      { option: "-c", short: "O - CFRONT", description: "if you put false, it will disable the cache" }
+    ]}
+  title="Masterscript Options" options={{ toolbar: true, showTitle: true }} />
+
+  * Lambda Example : 
+  
+  ```js
+    ./master_deploy.sh -d LAMBDA -e DEV -s auth0proxy
+  ```
+
+  * ECS Example:
+  
+  ```js
+    ./master_deploy.sh -d ECS -e DEV -t latest -s member-processor-es_appvar -i member-processor-es -p FARGATE
+  ```
+
+  * EBS Example:
+  
+  ```js
+    ./master_deploy.sh -d EBS -e DEV -t  "tagname"
+  ```
+
+  * CFRONT Example:
+  
+  ```js
+    ./master_deploy.sh -d CFRONT -e DEV -c false
+  ```
+
+### b. Setupscr.sh script : Usage
+
+  This section is optional
+
+  * To help user create/update or validate json variables in file format, a script call ./setupscr_< version>.sh is available for end-user.
+  * This script is subset & independent of Masterscript execution
+  * This script is available on the Github and refer to [Setupscr.sh & Masterscript deployment steps : In-depth technical](/model/build-and-deploy/in-depth-master-setup-scripts) document. 
+
+### c. Docker Build and Tag
+
+  * Ideally its better to keep Dockerfile and other docker related dependency at the root folder. As each developer has their own style this cannot be controlled.
+  * Hence, docker build or compose has to be customised for each app deployment. DEVOPS team shall work with respective developer during deployment process for docker build.
+  * Docker tag is handled inside the Masterscript. The end-user just have to give the image and tag details during deployment and Masterscript shall take care of Standard tagging format.
+  * Please note the distinction - (info) Docker Tagging is handled by masterscript and Docker Build is still custom process.
+
+  Reference purpose: Standard tagging format
+
+  ```js
+    TAG=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/tc-notifications:$CIRCLE_SHA1
+  ```
+
+  Note: ECS task with 2 container is currently not supported by Masterscript Release V1.1
+
+### d. Deployment Steps
+
+  * If you have uploaded validated JSON file to S3 then goto your application github code.
+  * At the root of the app, create a folder and file  .circleci/config.yml 
+  * Update config.yml as per your application need.
+  * Finally, at "deploy" section add the link as given below. Note : Based on deployment type and environment type your actual entry may varies.
+
+  Format for Deployment is 
+
+  Example :
+
+  <img src={image4} height="300" />
+
+  BUILD
+  ```js
+    ./buildenv.sh -e DEV -b member-processor-es_deployvar
+  ```
+
+  DEPLOY
+  ```js
+    ./master_deploy.sh -d ECS -e DEV -t latest -s member-processor-es_appvar -i member-processor-es
+  ```
+
+  ```js
+    -d : deployment type : ECS, EBS or Cloudfront.
+    -e : deployment environment type: DEV or PROD
+    -t : Docker tag 
+    -i : Image name
+    -s : Name of the json file you uploaded to S3 (file name without JSON extension).
+  ```
+  Important Note : 
+
+  You still need to provide AWS Secret access and key along with AWS ECS repository details at app project circleci environment variables section. 
+
+### e. Masterscript in action
+
+  * Once you commit the repo, CI/CD process kicks-in.
+  * As the masterscript is embedded inside the CI/CD process (at config.yml) there is no need for external trigger.
+  * Just monitor the deployment process and check for "Running Masterscript" log for further details.
+  * <img src={image5} height="300" />
+
+## 3. EXAMPLE
+
+### Masterscript : ECS by example
+
+  #### Use case scenario
+
+  Lets look at practical example of deploying "[member-processor-es](https://github.com/topcoder-platform/member-processor-es)" app using masterscript. This is a nodejs app which needs to be dockerized and follows  CI/CD process, the deployment type is ECS.
+
+  ***We shall follow Section 2 Execution Steps.***
+
+  * Create Infra
+    * The very first step is create necessary infrastructure at ECS. For this step either Developer or Devops team can create. Now, how we decide to deploy whether on ECS, EBS is choice of app owner or Devops team can recommend.
+    * Here we have created ECR, ECS Cluster,Service and task definition. In this example - we are using existing cluster "member-processor-services" which is already created. Refer to screen shot shared.
+    * We just need to create "member-processor-service" and it's relevant task, container and ECR repository.
+    * <img src={image6} height="700" />
+    * Note down all the infra variables.
+      * Json Configuration
+      ```json
+        AWS_REPOSITORY=member-processor-es
+        AWS_ECS_CLUSTER=member-processor-services
+        AWS_ECS_SERVICE=member-processor-es-svc
+        AWS_ECS_TASK_FAMILY=member-processor-es-def
+        AWS_ECS_CONTAINER_NAME=member-processor-es
+        AWS_ECS_PORTS=0:3000:tcp
+      ```
+      * Save this file as member-processor-es_appvar.json
+      * Sample appvar json file here
+  * Create JSON File for application variables 
+    * Create JSON with relevant app and infra details.
+    * Refer to [this](https://github.com/topcoder-platform/tc-deploy-scripts/blob/master/template/variable_file_template/sample_ecs_appvar.json) sample template for creating JSON file.
+    * Optional :
+      * End-user has the option of using Setupscr.sh script.
+      * This script helps users to create variables and infra details based on the deployment type (ECS, EBS and Cloudfront). 
+      * This scripts also helps user in validating the JSON file format and values.
+      * Refer to the [In-depth Master & Setup Scripts](/model/build-and-deploy/in-depth-master-setup-scripts) technical document for further details.
+      * DO NOT update AWS Access and AWS Secret keys inside the JSON file.
+  * Upload to S3
+    * Upload the JSON file to S3
+    * [Amazon S3](https://s3.console.aws.amazon.com/s3/home?region=us-east-1) → [tc-platform-dev](https://s3.console.aws.amazon.com/s3/buckets/tc-platform-dev/?region=us-east-1&tab=overview)/[securitymanager](https://s3.console.aws.amazon.com/s3/)
+    * or for prod
+    * Amazon S3 → tc-platform/securitymanager
+  * Docker Build & Tag 
+    * In this example, we have created a custom build.sh in order to ""build" and "tag" the Docker image in the format which deployment expects.
+    * <img src={image7} height="300" />
+    * Note the distinction, (info) the Docker tagging has been  has been included at Masterscript and end-user just have to give Image and tag details during deployment. However, For Docker build,  devops team shall assess the suitability & recommend.
+      ```js
+        ./buildenv.sh -e DEV -b member-processor-es_deployvar
+      ```
+  * Update Circleci
+    * (Prerequisite step is to create config.yml first and necessary project steps, jobs etc)
+    * Go to Circleci → build settings → environment variables
+    * Update AWS secret key, access key, region, account id and ECS ECR repository details.
+      <img src={image8} height="300" />
+  * Embed script details.
+    * For deployment with Circleci. Go to app Github → root of the folder → create file → .circleci/config.yml
+    * Update the necessary prerequisites as per your app need. (languages, steps, jobs, docker images, branches etc)
+    * Finally, at deploy section, embed the following script ((warning) care full with indentation)
+    * Refer member-processor-es [config.yml](https://github.com/topcoder-platform/member-processor-es/blob/develop/.circleci/config.yml) at github.
+    ```js
+      deploy:
+        name: Running Masterscript.
+        command: |
+        git clone --branch v1.3 https://github.com/topcoder-platform/tc-deploy-scripts ../buildscript
+        cp ./../buildscript/master_deploy.sh .
+        cp ./../buildscript/buildenv.sh .
+        cp ./../buildscript/awsconfiguration.sh .
+        ./awsconfiguration.sh DEV
+        source awsenvconf
+        ./buildenv.sh -e DEV -b member-processor-es_deployvar
+        source buildenvvar
+        ./master_deploy.sh -d ECS -e DEV -t latest -s member-processor-es_appvar -i member-processor-es
+    ```
+  * Masterscript in action.
+    * Once you commit the repo, CI/CD process kicks-in.
+    * As the masterscript is embedded inside the CI/CD process (at config.yml) there is no need for external trigger.
+    * Just monitor the deployment process and check for "Running Masterscript" log for further details.
+    * <img src={image9} height="300" />
+
+## 4. Limitation
+
+### Masterscript Release V1.3 limitation
+
+  * Initial Infrastructure creation for AWS deployment type ECS, EBS or Cloudfront isn't supported.
+  * ECS task with 2 container is currently not supported.
+  * Backward compatibility for existing ECS or EBS or Cloudfront has limited support. This requires Devops help.
+  * Masterscript doens't perform any unit testing, it just deploys.
+
+## 5. Further reference 
+
+### Other Use-case Scenario
+
+  * Submission-scoring is a nodejs app which needs to be dockerized and to  be integrated with CI/CD process and deployed to ECS. is this a good fit for Masterscript deployment ?
+    * Yes, as this is straight forward building a docker file and deploying. Just capture app variables in JSON format, upload to S3 and update config.yml for Masterscript deployment.
+  * Submission-scanning is a nodejs app which has requirement of interacting with another app,  this means having 2 different docker container in the same ECS task deployment. is this a good fit for Masterscript deployment ?
+    * No, as there are more than one container deployment and requires a docker-compose build. Masterscript doesn’t support this kind of deployment.
+  * Ap-member-service is an existing EBS deployment and i would like to leverage Masterscript for future deployment purpose can i use Masterscript straight away ? will it integrate well ?
+    * Format of old EBS deployment isn’t compatible with standards which Masterscript support now. Hence, it’s possible to use Maserscript but requires handholding from Devops team.
+
+### FAQ
+
+  Refer [Master & Setup Scripts FAQ](/model/build-and-deploy/master-setup-scripts) Page
+
+### JSON file
+
+  For JSON file creation and validation refer section 2.2 and section 5 at the this page
+  [In-depth Master & Setup Scripts](/model/build-and-deploy/in-depth-master-setup-scripts)
+
+### Video demo 
+
+  Please refer [MasterScript Release V1.0](https://drive.google.com/file/d/19oGwFm6nNzQeOnM_l79MfdvwcHzWKfsU/view)
+
+<Copyright />

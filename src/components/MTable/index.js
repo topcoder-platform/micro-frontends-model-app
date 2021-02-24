@@ -1,6 +1,6 @@
 
 import React from "react";
-import { forwardRef } from "react";
+import { useState, forwardRef } from "react";
 import MaterialTable from "material-table";
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -39,10 +39,15 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
+let optionsData = { search: false, paging: false, filtering: false, exportButton: false, showTitle: false, toolbar: false, headerStyle: { backgroundColor: "gray", color: "white" } }
+
 const MTable = ({ columns, data, title, options }) => {
+  let mergedOptions = {...optionsData, ...options}
   return (
-    <div className={styles.materialTable}>
-      <MaterialTable columns={columns} data={data} title={title} icons={tableIcons} options={options} />
+    <div>
+      <div className={styles.materialTable}>
+        <MaterialTable columns={columns} data={data} title={title} icons={tableIcons} options={mergedOptions} />
+      </div>
     </div>
   )
 };
