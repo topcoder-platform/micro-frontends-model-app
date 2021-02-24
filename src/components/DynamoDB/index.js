@@ -77,7 +77,7 @@ const DynamoDB = (props) => {
           columns={dynamoDBGetStatusData.columns}
           data={dynamoDBGetStatusData.data}
           title="DynamoDB Cats Table" 
-          options={{ search: true, paging: true, filtering: true, exportButton: true, showTitle: false, toolbar: true }} />
+          options={{ search: true, paging: true, filtering: true, exportButton: true, toolbar: true }} />
       }
       <div className={styles.box}>
         <div className={toggle.disable ? styles.boxTxtDisabled : styles.boxTxt}>Status : </div>
