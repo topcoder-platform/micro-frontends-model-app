@@ -59,10 +59,17 @@ const appMenu = [
         filePath: "/standards",
       },
       {
-        title: "Publish / Receive Events",
+        title: "Publish / Receive Events (Bus API)",
         path: "/model/standards/publish-receive-events",
         id: "publish-receive-events",
         fileName: "publish-receive-events.mdx",
+        filePath: "/standards",
+      },
+      {
+        title: "Publish / Receive Events (Kafka)",
+        path: "/model/standards/kafka",
+        id: "kafka",
+        fileName: "kafka.mdx",
         filePath: "/standards",
       }
     ]
