@@ -1,0 +1,20 @@
+import PostgreSQL from "../../components/PostgreSQL"
+import LiveDemo from "../common/live-demo.mdx";
+import Swagger from "../../components/Swagger"
+import postgreSQLV5Swagger from "../../assets/openapi/model-api-pgsql-oas3.yaml";
+
+# PostgreSQL Database
+
+Some of Topcoder's projects make use of PostgreSQL instead of Dynamodb.
+The expectation is to usually provide helper npm scripts that run migrations (using [umzug](https://www.npmjs.com/package/umzug))
+which help keep the database schema up to date and make for easier deployment.
+
+
+Here is a topcoder starter for communicating with PostgreSQL :
+[PostgreSQL Reusable Template - Github Repository](https://github.com/topcoder-platform/model-api-pgsql)
+
+<div><LiveDemo component={<PostgreSQL />} /></div>
+
+## SwaggerUI of Model API PostgreSQL
+
+<div><Swagger swaggerSpec={postgreSQLV5Swagger} /></div>
