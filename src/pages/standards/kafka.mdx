@@ -1,0 +1,20 @@
+import Kafka from "../../components/Kafka"
+import LiveDemo from "../common/live-demo.mdx";
+import Swagger from "../../components/Swagger"
+import kafkaV5Swagger from "../../assets/openapi/model-api-kafka-oas3.yaml";
+
+# Publish / Receive Events (Kafka)
+
+Topcoder processes are all event driven. Almost all services generate events that are then published on Kafka - and 
+consumed by other services. Topcoder has the [bus api](https://github.com/topcoder-platform/tc-bus-api) that 
+interfaces with Kafka already - so you would never find yourself creating a Kafka producer to send events 
+in Topcoder's Kafka instance, but you will find uses for Consuming these events from Kafka.
+
+Here is a topcoder starter for communicating with kafka
+[Kafka Template - Github Repository](https://github.com/topcoder-platform/model-api-kafka)
+
+<div><LiveDemo component={<Kafka />} /></div>
+
+## SwaggerUI of Model API Kafka
+
+<div><Swagger swaggerSpec={kafkaV5Swagger} /></div>
