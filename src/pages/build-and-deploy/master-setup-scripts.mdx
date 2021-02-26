@@ -1,0 +1,94 @@
+import MTable from "../../components/MTable"
+import Copyright from "../common/copyright.mdx";
+
+# Masterscript & Setup Script
+  
+  FAQ : Release V1.1
+
+## Masterscript Release  tracker
+
+<MTable 
+  columns={[
+      { title: "Release V1.0", field: "releasev10" }
+    ]} 
+  data={[
+      { releasev10: "ECS EC2, ECS  Fargate, EBS & Cloudfront Deployment support." },
+      { releasev10: "Documentation  @ Atlassian with use-case study." },
+    ]}
+  title="empty" />
+
+<MTable 
+  columns={[
+      { title: "Release V1.1", field: "releasev11" }
+    ]} 
+  data={[
+      { releasev11: "Lambda deployment support for Serverless framework" },
+      { releasev11: "Streamlining of Masterscript older version and deployment" },
+    ]}
+  title="empty" />
+
+#### What's the path for downloading the Masterscript and Setupscr.sh.
+
+  From the Git Repo from the path [here](https://github.com/topcoder-platform/tc-deploy-scripts.git)
+
+  You don't need to use Masterscript directly. Only ***Setupscr.sh*** is required for management of JSON file variables.
+
+  If you have trouble downloading or need support on script, please contact Gunasekara or Nagendra
+
+#### I need a demo on getting started on Masterscript Release V1.1
+
+  For video demo please refer [MasterScript Release 1.0](https://drive.google.com/file/d/19oGwFm6nNzQeOnM_l79MfdvwcHzWKfsU/view?usp=sharing)
+
+#### Can I leverage development variable JSON file for Production ?
+
+  Yes, you just need to edit the relevant AWS variable and app variable specific to production, validate with masterscript before uploading to production environment S3.
+
+#### I would like to avoid entering variables via deploy script one-by-one, but create all variable values in a json files, Does Masterscript Release V1.1 support this.
+
+  Yes, refer to /setup_ms/variable_file_template/< files> for ECS/EBS/CF and ensure that you adhere to sample_ecs_var.json or sample_ebs_var.json. Note that first section for awsdeployvar is mandatory section.
+  
+#### Does masterscript Release V1.1 support ECS Fargate deployment ? Which option to choose for this ?
+
+  Masterscript Release V1.0 support both EC2 and Fargate . Just use -p FARGATE
+
+  ```js
+    ./master_deploy.sh -d ECS -e DEV -t $CIRCLE_SHA1 -s tcemail-var,tcemail-var-common -p FARGATE
+  ```
+
+#### Does masterscript Release V1.1 create necessary ECS or EBS infrastructure like Cluster, Services or EC2 instances.
+
+  No, it is assumed that the relevant deployment infra is available before Masterscript Release V1.0 is executed. But it’s part of Roadmap.
+
+#### What happens, if by mistake I enter incorrect variable or how do I modify, view existing variables.
+
+  There are 2 approach
+
+  1. Find the < filename>.json file at setup_ms folder, manually correct and validate.
+  2. Execute ./setup_ms7.3.sh and choose option for modification.
+
+#### Is environment variables are securely uploaded ?
+
+  The json file in-transit is secure via https and at-rest the s3 bucket is enabled with default encryption.
+
+#### How do I leverage common variables files at Masterscript Release V1.1
+
+  1. First create a common variables files adhering to sample_ecs_var.json. The mandatory part of awsdeployvar has to be omitted.
+  2. Upload this common file to S3 bucket tc-platform-< env>/securitymanager
+  3. At the final step for .circle/config.yml update as following
+
+  ```js
+    ./master_deploy.sh -d ECS -e DEV -i $IMAGENAME-t $CIRCLE_SHA1 -s <app-var-file>, <common-var-file>
+  ```
+
+#### Troubleshooting: I am unable to validate my json file. Getting error while validating
+
+  1. Ensure that you have installed prerequisite software before validating.
+  2. Refer to the /template/ECS/schema_template.json and json file created adheres to this schema.
+  3. The easy validation approach is to verify your file at [https://jsonlint.com/](https://jsonlint.com/) and fix any json specific issue before validating at masterscript Release V1.0
+
+#### Why doesn't Masterscript Release V1.1 script automate file upload to S3.
+
+  1. File upload to S3 requires AWS CLI configuration and it can be  either yours or shared  credentials. CLI config and Shared Cred usage situation we would like to avoid.
+  2. From Audit trail context, user console upload tracks the file upload
+
+<Copyright />

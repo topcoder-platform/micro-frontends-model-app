@@ -59,11 +59,72 @@ const appMenu = [
         filePath: "/standards",
       },
       {
-        title: "Publish / Receive Events",
+        title: "PostgreSQL Database",
+        path: "/model/standards/postgresql-database",
+        id: "postgresql-database",
+        fileName: "postgresql-database.mdx",
+        filePath: "/standards",
+      },
+      {
+        title: "Publish / Receive Events (Bus API)",
         path: "/model/standards/publish-receive-events",
         id: "publish-receive-events",
         fileName: "publish-receive-events.mdx",
         filePath: "/standards",
+      },
+      {
+        title: "Publish / Receive Events (Kafka)",
+        path: "/model/standards/kafka",
+        id: "kafka",
+        fileName: "kafka.mdx",
+        filePath: "/standards",
+      },
+      {
+        title: "JWT Token Scopes",
+        path: "/model/standards/jwt-token-scopes",
+        id: "jwt-token-scopes",
+        fileName: "jwt-token-scopes.mdx",
+        filePath: "/standards",
+      },
+      {
+        title: "Logging Standards",
+        path: "/model/standards/logging-standard",
+        id: "logging-standard",
+        fileName: "logging-standard.mdx",
+        filePath: "/standards",
+      }
+    ]
+  },
+  {
+    title: "Build and Deploy",
+    children: [
+      {
+        title: "CircleCI Master Deploy Script",
+        path: "/model/build-and-deploy/circleci-master-deploy-script",
+        id: "circleci-master-deploy-script",
+        fileName: "circleci-master-deploy-script.mdx",
+        filePath: "/build-and-deploy",
+      },
+      {
+        title: "Master & Setup Scripts",
+        path: "/model/build-and-deploy/master-setup-scripts",
+        id: "master-setup-scripts",
+        fileName: "master-setup-scripts.mdx",
+        filePath: "/build-and-deploy",
+      },
+      {
+        title: "In-depth Master & Setup Scripts",
+        path: "/model/build-and-deploy/in-depth-master-setup-scripts",
+        id: "in-depth-master-setup-scripts",
+        fileName: "in-depth-master-setup-scripts.mdx",
+        filePath: "/build-and-deploy",
+      },
+      {
+        title: "Master Script Concept & Execution Process",
+        path: "/model/build-and-deploy/master-script-concept-execution-process",
+        id: "master-script-concept-execution-process",
+        fileName: "master-script-concept-execution-process.mdx",
+        filePath: "/build-and-deploy",
       }
     ]
   },

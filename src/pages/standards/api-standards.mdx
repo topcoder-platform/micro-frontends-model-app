@@ -1,4 +1,5 @@
 import MTable from "../../components/MTable"
+import Copyright from "../common/copyright.mdx";
 
 export const RequestUrl = props => (
   <p><span style={{ color: props.iconColor }}>{props.icon}</span> [<span style={{ color: props.methodColor }}>{props.method}</span>] <span style={{ color: props.urlColor }}>{props.url}</span></p>
@@ -53,8 +54,7 @@ Here are several conventions we should follow before designing our v5 api’s
       { resource: "/members", get: "Returns a list of members", post: "Create a new member", put: "Bulk update of members", delete: "Delete all members" },
       { resource: "/members/:handle", get: "Returns a specific member", post: "Method not allowed (405)", put: "Update the specified member", delete: "Delete a specific member" }
     ]}
-  title="empty" 
-  options={{ search: false, paging: false, filtering: false, exportButton: false, showTitle: false, toolbar: false }} />
+  title="empty" />
 
 - **Don’t Misuse Safe Methods** (Idempotency)
 
@@ -244,3 +244,5 @@ Here are several conventions we should follow before designing our v5 api’s
   [challenge api](https://github.com/topcoder-platform/challenge-api)
 
   [member api](https://github.com/topcoder-platform/member-api)
+
+<Copyright />

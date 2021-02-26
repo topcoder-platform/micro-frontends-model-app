@@ -1,0 +1,94 @@
+import MTable from "../../components/MTable"
+import Copyright from "../common/copyright.mdx";
+
+# Topcoder JWT Token Scopes
+
+  We're managing scopes using the following syntax:
+
+  ACCESS_TYPE:SERVICE_OR_DATA_TYPE
+
+## Services
+
+<MTable 
+  columns={[
+      { title: "Service Names", field: "serviceNames" },
+      { title: "Description", field: "description" },
+      { title: "Notes", field: "notes" }
+    ]} 
+  data={[
+      { serviceNames: "connect_project", description: "Connect Project Service", notes: "" },
+      { serviceNames: "bus_topics", description: "TC Bus API", notes: "" },
+      { serviceNames: "bus_api", description: "TC Bus API", notes: "" },
+      { serviceNames: "email_templates", description: "TC Email Service", notes: "" },
+      { serviceNames: "roles", description: "Identity and Member Service", notes: "Should this change to use_roles?" },
+      { serviceNames: "user_profiles", description: "user_profiles", notes: "" }
+    ]}
+  title="empty" />
+
+## Scopes Standard
+
+<MTable 
+  columns={[
+      { title: "Access Type", field: "accessType" },
+      { title: "Description", field: "description" },
+      { title: "Notes", field: "notes" }
+    ]} 
+  data={[
+      { accessType: "update", description: "change records/data", notes: "" },
+      { accessType: "read", description: "read-only access", notes: "" },
+      { accessType: "delete", description: "delete records / data", notes: "" },
+      { accessType: "create", description: "create records / data", notes: "" },
+      { accessType: "all", description: "all possible scopes", notes: "equivalent to admin access" }
+    ]}
+  title="empty" />
+
+## Scopes
+
+<MTable 
+  columns={[
+      { title: "Scope Name", field: "scopeName" },
+      { title: "Purpose", field: "purpose" },
+      { title: "Notes", field: "notes" }
+    ]} 
+  data={[
+      { scopeName: "all:connect_project", purpose: "read write and delete access on connect project ", notes: "'topic' and 'post' are parts of connect project." },
+      { scopeName: "read:bus_topics", purpose: "read all available topics in Kafka. ", notes: "" },
+      { scopeName: "write:bus_api", purpose: "POST message payload on particular Kafka's topic through BUS service.", notes: "" },
+      { scopeName: "read:email_templates", purpose: "Read particular email template for validation through Email service", notes: "" },
+      { scopeName: "write:roles", purpose: "", notes: "" },
+      { scopeName: "read:user_profiles", purpose: "", notes: "" },
+      { scopeName: "read:roles", purpose: "", notes: "" }
+    ]}
+  title="empty" />
+
+## Useful Links
+
+### M2M Java Lib
+
+  Repo - https://github.com/appirio-tech/tc1-api-core/tree/dev/tech.core/tech.core.api
+
+  POM.xml - core.api : 4.3.1
+
+  Implementation - https://github.com/appirio-tech/ap-member-microservice/blob/master/service/pom.xml#L16 
+
+  https://github.com/appirio-tech/ap-member-microservice/blob/master/service/src/main/java/com/appirio/service/MemberServiceApplication.java#L57
+
+  Generate machine token - https://github.com/appirio-tech/ap-member-microservice/blob/68c97f603be5644ac969b2d5ee0a7071871031a8/service/src/main/java/com/appirio/service/member/util/Helper.java#L114
+
+  Scope checking - https://github.com/appirio-tech/ap-member-microservice/blob/878499e096ce83289b0bdd239db8838da1a5162f/service/src/main/java/com/appirio/service/member/manager/MemberSearchManager.java#L550
+
+### M2M NodeJs Lib
+
+  Latest : https://github.com/appirio-tech/tc-core-library-js/releases/tag/v2.4
+
+### M2M implementation
+
+  Ex - https://github.com/topcoder-platform/tc-notifications/blob/dev/src/services/BusAPI.js#L17
+
+### M2M scope validation
+  
+  Ex - https://github.com/topcoder-platform/tc-project-service/blob/feature/m2m-support/src/util.js#L93
+
+  Ex - https://github.com/appirio-tech/tc1-api-core/blob/0c65d793527dadda6da4977113cf873277b7d1ed/tech.core/tech.core.service.identity/src/main/java/com/appirio/tech/core/service/identity/resource/RoleResource.java#L247
+
+<Copyright />
