@@ -197,10 +197,6 @@ paths:
         required: true
         schema:
           type: string
-      - name: verifyUrl
-        in: query
-        schema:
-          type: string
       requestBody:
         content:
           application/json:
@@ -234,6 +230,12 @@ paths:
                 $ref: '#/components/schemas/ErrorModel'
         404:
           description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+        409:
+          description: Email is already registered
           content:
             application/json:
               schema:
