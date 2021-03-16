@@ -2,7 +2,7 @@
  * Document display component
  *
  */
-import React from "react";
+import React, { useEffect } from 'react';
 import Loadable from "react-loadable";
 import { preToCodeBlock } from "mdx-utils";
 import { MDXProvider } from "@mdx-js/react";
@@ -36,20 +36,20 @@ const Documents = ({ folderId, documentId }) => {
     }
   };
   
-  var document = {}
+  var selDocument = {}
   if (documentId) {
     if (folderId) {
       appMenu.forEach(item => {
         if (item.hasOwnProperty("id")) {
           if (item.id === documentId  && item.filePath === "/" + folderId) {
-            document = item
+            selDocument = item
           }
         } else {
           if (item.hasOwnProperty("children")) {
             item.children.forEach(subitem => {
               if (subitem.hasOwnProperty("id")) {
                 if (subitem.id === documentId && subitem.filePath === "/" + folderId) {
-                  document = subitem
+                  selDocument = subitem
                 }
               }
             })
@@ -60,7 +60,7 @@ const Documents = ({ folderId, documentId }) => {
       appMenu.forEach(item => {
         if (item.hasOwnProperty("id")) {
           if (item.id === documentId) {
-            document = item
+            selDocument = item
           }
         }
       });
@@ -69,24 +69,36 @@ const Documents = ({ folderId, documentId }) => {
     appMenu.forEach(item => {
       if (item.hasOwnProperty("id")) {
         if (item.id === "documentation") {
-          document = item
+          selDocument = item
         }
       }
     });
   }
 
   let LoadDocument;
-  if (document) {
+  if (selDocument) {
+    // set page title and triggering analytics
+    useEffect(() => {
+      let formattedPageTitle = "Documentation | Topcoder"
+      if (selDocument.title) {
+        formattedPageTitle = selDocument.title + " | " + formattedPageTitle
+      }
+      document.title = formattedPageTitle
+      // call analytics if the parent Frame app initialized it
+      if (window.analytics && typeof window.analytics.page === "function") {
+        window.analytics.page();
+      }
+    });
     // Dynamically import the document to be displayed
     LoadDocument = Loadable({
       loader: async () =>
-        import(`../../pages${document.filePath || ""}/${document.fileName}`), // eslint-disable-line no-alert
+        import(`../../pages${selDocument.filePath || ""}/${selDocument.fileName}`), // eslint-disable-line no-alert
       loading() {
         return <div>Loading...</div>;
       },
     });
   }
-
+  
   return (
     <div style={{ overflow: "overlay" }}>
       <MDXProvider components={components}>
