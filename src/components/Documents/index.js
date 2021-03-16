@@ -80,7 +80,7 @@ const Documents = ({ folderId, documentId }) => {
     // set page title and triggering analytics
     useEffect(() => {
       let formattedPageTitle = "Documentation | Topcoder"
-      if (selDocument.title) {
+      if (selDocument.title && selDocument.title != "Documentation") {
         formattedPageTitle = selDocument.title + " | " + formattedPageTitle
       }
       document.title = formattedPageTitle
