@@ -204,6 +204,13 @@ const appMenu = [
         fileName: "mdx-component-example.mdx",
         filePath: "/help",
       },
+      {
+        title: "Copilots - Link this site!",
+        path: "/model/help/copilots-link",
+        id: "copilots-link",
+        fileName: "copilots-link.mdx",
+        filePath: "/help",
+      },
     ],
   }
 ];
