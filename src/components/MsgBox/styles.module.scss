@@ -1,0 +1,25 @@
+@import "styles/include";
+
+.msgBox {
+  padding: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.icon {
+  font-weight: bold;
+  float: left;
+  font-size: 22px;
+  line-height: 20px;
+  margin-top: -3px; 
+}
+
+.msg {
+	margin-left: 35px;
+}
+
+.msg p {
+  line-height: 8px;
+  margin-top: 5px;
+  margin-bottom: 12px;
+}
