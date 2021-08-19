@@ -226,6 +226,10 @@ Here are several conventions we should follow before designing our v5 api’s
   <RequestUrl icon='✓' iconColor='green' method='POST' methodColor='green' url='/v5/members' urlColor='purple' />
 
   Simple Rule : The endpoint is understood as for multiple then Array, or else return an Object.
+  
+- **Security - Implemented vs Documentation**
+  
+  Security of the endpoints should be implemented via a central permission config similar to https://github.com/topcoder-platform/skills-api/blob/develop/src/permissions/constants.js and repo should have a script to generate the security documentation of all the routes similar to https://github.com/topcoder-platform/skills-api/blob/develop/package.json#L18. This will ensure that our security documentation would be exactly what our implementation is.
 
 - **Security - Authentication & Authorization**
   
