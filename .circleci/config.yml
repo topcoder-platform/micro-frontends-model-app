@@ -68,6 +68,7 @@ workflows:
               only:
                 - develop
                 - feature/redoc
+                - feature/improved_api_standards
 
       # Production builds are exectuted only on tagged commits to the
       # master branch.
