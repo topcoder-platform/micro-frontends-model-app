@@ -42,20 +42,36 @@ Here are several conventions we should follow before designing our v5 api’s
 
   How to use of HTTP verbs:
 
-<MTable 
+  <MTable 
   columns={[
       { title: "Resource", field: "resource" },
       { title: "GET (read)", field: "get" },
+      { title: "HEAD (headers)", field: "head" },
       { title: "POST (create)", field: "post" },
       { title: "PUT (update)", field: "put" },
       { title: "PATCH (partial update)", field: "patch" },
       { title: "DELETE (delete)", field: "delete" }
     ]} 
   data={[
-      { resource: "/members", get: "Returns a list of members", post: "Create a new member", put: "Bulk update of members", patch: "Method not allowed (405)", delete: "Delete all members" },
-      { resource: "/members/:handle", get: "Returns a specific member", post: "Method not allowed (405)", put: "Update the specified member", patch: "Partially update the specified member", delete: "Delete a specific member" }
+      { resource: "/members", get: "Returns a list of members", head: "Returns only headers without list of members", post: "Create a new member", put: "Bulk update of members", patch: "Method not allowed (405)", delete: "Delete all members" },
+      { resource: "/members/:handle", get: "Returns a specific member", head: "Returns only headers without member payload", post: "Method not allowed (405)", put: "Update the specified member", patch: "Partially update the specified member", delete: "Delete a specific member" }
     ]}
   title="empty" />
+  
+  - **HEAD**
+    - Head should be implemented to return headers only for a read request i.e. not for PUT/POST/DELETE type of operations.
+    - Further, the primary header which should always be there is **Last-Modified** which should be fetched from data source in efficient manner without loading the actual data from the database. This header is potentially useful for cache management by the caller.
+  - **PUT**
+    - PUT should always replace the all of the fields of the given entity resting at the given URI.
+    - There can be immutable fields in the payload which needs to be ignored by the PUT handler.
+    - An user can PUT only those fields which they had access to read via GET endpoint for the same URI, other fields (even though documented in swagger) would be considered as immutable for that user and would be silenty ignored.
+    - Immutable fields should be marked in the swagger documentation explicitly.
+    - Fields can be immutable because they are not managed by the API in concern or they are modified by the admins.
+    - If certain fields are not allowed to be updated because of the state of the object resting the URI, handler should return validation error with status code 400. And caller is suggested to use PATCH instead to modify other fields which are not restricted to be updated because of the state of the object e.g. prize money can not be altered for an active challenge. In this example, if caller tries to change the prize money via PUT, it should return 400 with appropriate error message while if the same caller is making a PUT wihtout alterting prize money, it should replace the entity with other changed fields.
+  - **PATCH**
+    - Payload for PATCH would contain the partial object that is expected to be changed. No action based payload should be used. By virtue of this, PATCH is always Idempotent.
+    - PATCHing an immutable field should be ignored as in case of PUT
+    - PATCHing a field, which is immutable because of state of the object, should return 400 with appropriate error message
 
 - **Don’t Misuse Safe Methods** (Idempotency)
 
