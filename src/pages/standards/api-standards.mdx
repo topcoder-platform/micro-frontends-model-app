@@ -48,11 +48,12 @@ Here are several conventions we should follow before designing our v5 api’s
       { title: "GET (read)", field: "get" },
       { title: "POST (create)", field: "post" },
       { title: "PUT (update)", field: "put" },
+      { title: "PATCH (partial update)", field: "patch" },
       { title: "DELETE (delete)", field: "delete" }
     ]} 
   data={[
-      { resource: "/members", get: "Returns a list of members", post: "Create a new member", put: "Bulk update of members", delete: "Delete all members" },
-      { resource: "/members/:handle", get: "Returns a specific member", post: "Method not allowed (405)", put: "Update the specified member", delete: "Delete a specific member" }
+      { resource: "/members", get: "Returns a list of members", post: "Create a new member", put: "Bulk update of members", patch: "Method not allowed (405)", delete: "Delete all members" },
+      { resource: "/members/:handle", get: "Returns a specific member", post: "Method not allowed (405)", put: "Update the specified member", patch: "Partially update the specified member", delete: "Delete a specific member" }
     ]}
   title="empty" />
 
