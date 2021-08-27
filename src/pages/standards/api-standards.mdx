@@ -59,8 +59,9 @@ Here are several conventions we should follow before designing our v5 api’s
   title="empty" />
   
   - **HEAD**
-    - Head should be implemented to return headers only for a read request i.e. not for PUT/POST/DELETE type of operations.
+    - Every topcoder API to have HEAD verb available for LIST endpoint for any resource in that API, no matter if it is a nested endpoint or root object e.g. v5/projects and /v5/projects/1234/members both should have HEAD verb available.
     - Further, the primary header which should always be there is **Last-Modified** which should be fetched from data source in efficient manner without loading the actual data from the database. This header is potentially useful for cache management by the caller.
+    - APIs are free to implement HEAD for GET BY ID endpoints as per needs i.e. it is not a standard to implement HEAD for /v5/projects/1234
   - **PUT**
     - PUT should always replace the all of the fields of the given entity resting at the given URI.
     - There can be immutable fields in the payload which needs to be ignored by the PUT handler.
