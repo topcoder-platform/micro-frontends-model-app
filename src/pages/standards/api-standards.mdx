@@ -54,7 +54,7 @@ Here are several conventions we should follow before designing our v5 api’s
     ]} 
   data={[
       { resource: "/members", get: "Returns a list of members", head: "Returns only headers without list of members", post: "Create a new member", put: "Bulk update of members", patch: "Method not allowed (405)", delete: "Delete all members" },
-      { resource: "/members/:handle", get: "Returns a specific member", head: "Returns only headers without member payload", post: "Method not allowed (405)", put: "Update the specified member", patch: "Partially update the specified member", delete: "Delete a specific member" }
+      { resource: "/members/:handle", get: "Returns a specific member", head: "Optional, Returns only headers without member payload, if implemented", post: "Method not allowed (405)", put: "Update the specified member", patch: "Partially update the specified member", delete: "Delete a specific member" }
     ]}
   title="empty" />
   
