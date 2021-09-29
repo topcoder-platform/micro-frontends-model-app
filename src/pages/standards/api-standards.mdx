@@ -42,19 +42,40 @@ Here are several conventions we should follow before designing our v5 api’s
 
   How to use of HTTP verbs:
 
-<MTable 
+  <MTable 
   columns={[
       { title: "Resource", field: "resource" },
       { title: "GET (read)", field: "get" },
+      { title: "HEAD (headers)", field: "head" },
       { title: "POST (create)", field: "post" },
-      { title: "PUT (update)", field: "put" },
-      { title: "DELETE (delete)", field: "delete" }
+      { title: "PATCH (partial update)", field: "patch" },
+      { title: "DELETE (delete)", field: "delete" },
+      { title: "PUT (update, optional)", field: "put" }
     ]} 
   data={[
-      { resource: "/members", get: "Returns a list of members", post: "Create a new member", put: "Bulk update of members", delete: "Delete all members" },
-      { resource: "/members/:handle", get: "Returns a specific member", post: "Method not allowed (405)", put: "Update the specified member", delete: "Delete a specific member" }
+      { resource: "/members", get: "Returns a list of members", head: "Returns only headers without list of members", post: "Create a new member", put: "Bulk update of members", patch: "Method not allowed (405)", delete: "Delete all members" },
+      { resource: "/members/:handle", get: "Returns a specific member", head: "Optional, Returns only headers without member payload, if implemented", post: "Method not allowed (405)", put: "Update the specified member", patch: "Partially update the specified member", delete: "Delete a specific member" }
     ]}
   title="empty" />
+  
+  - **HEAD**
+    - Every topcoder API to have HEAD verb available for LIST endpoint for any resource in that API, no matter if it is a nested endpoint or root object e.g. */v5/projects* and */v5/projects/1234/members* both should have HEAD verb available.
+    - Further, the primary header which should always be there is **Last-Modified** which should be fetched from data source in efficient manner without loading the actual data from the database. This header is potentially useful for cache management by the caller.
+    - APIs are free to implement HEAD for GET BY ID endpoints as per needs i.e. it is not a standard to implement HEAD for */v5/projects/1234*
+  - **PATCH**
+    - Payload for PATCH would contain the partial object that is expected to be changed. No action based payload should be used. By virtue of this, PATCH is always Idempotent.
+    - There can be immutable fields in the payload which needs to be ignored by the PATCH handler.
+    - An user can update only those fields which they had access to read via GET endpoint for the same URI, other fields (even though documented in swagger) would be considered as immutable for that user and would be silenty ignored.
+    - Immutable fields should be marked in the swagger documentation explicitly.
+    - Fields can be immutable because they are not managed by the API in concern or they are modified by the admins.
+    - PATCHing a field, which is immutable because of state of the object, should return 400 with appropriate error message.
+    - PATCH should return the updated object to the caller. It would allow the caller to verify, if need, which all fields were updated in the operation in situation where there are certain immutable fields altered in the payload.
+  - **PUT (Optional)**
+    - It is upto the API if it needs the PUT endpoint, however, it encouraged to use PATCH only for all updates unless the need of PUT is evident or it helps to acheive particular use case of the API.
+    - PUT should always replace the all of the fields of the given entity resting at the given URI.
+    - PUTing an immutable field should be ignored as in case of PATCH
+    - If certain fields are not allowed to be updated because of the state of the object resting the URI, handler should return validation error with appropriate status code 4xx. And caller is suggested to use PATCH instead to modify other fields which are not restricted to be updated because of the state of the object e.g. prize money can not be altered for an active challenge. In this example, if caller tries to change the prize money via PUT, it should return 400 with appropriate error message while if the same caller is making a PUT wihtout alterting prize money, it should replace the entity with other changed fields.
+    - PUT should return the updated object to the caller. It would allow the caller to verify, if need, which all fields were updated in the operation in situation where there are certain immutable fields altered in the payload.
 
 - **Don’t Misuse Safe Methods** (Idempotency)
 
@@ -209,6 +230,10 @@ Here are several conventions we should follow before designing our v5 api’s
   <RequestUrl icon='✓' iconColor='green' method='POST' methodColor='green' url='/v5/members' urlColor='purple' />
 
   Simple Rule : The endpoint is understood as for multiple then Array, or else return an Object.
+  
+- **Security - Implemented vs Documentation**
+  
+  Security of the endpoints should be implemented via a central permission config similar to https://github.com/topcoder-platform/skills-api/blob/develop/src/permissions/constants.js and repo should have a script to generate the security documentation of all the routes similar to https://github.com/topcoder-platform/skills-api/blob/develop/package.json#L18. This will ensure that our security documentation would be exactly what our implementation is.
 
 - **Security - Authentication & Authorization**
   
