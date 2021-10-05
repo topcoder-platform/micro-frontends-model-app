@@ -1,0 +1,66 @@
+import Copyright from "../common/copyright.mdx";
+import MsgBox from "../../components/MsgBox"
+
+export const TxtColor = props => (
+  <span style={{ color: props.txtColor }}>{props.txt}</span>
+);
+
+# Kafka / ES : Avoid Race Condition
+
+### 1. Kafka Message : Attaching Key to  payload
+  
+  For kafka events which involves  `create` or `update` or `delete` payload, ensure attaching a Key to the “payload” before posting to tc-bus-api or direct posting to kafka.
+
+  <MsgBox bgColor="#DEEBFF" txtColor="black" iconColor="blue" iconType="info">
+    Attaching a `key` to messages will ensure `messages` with the same key always go to the `same` partition in a topic. Kafka guarantees order within a partition, but not across partitions in a topic, so alternatively not providing a key - which will result in round-robin distribution across partitions - will not maintain such order.
+  </MsgBox>
+
+  #### Example A
+
+  Ensure that key is Unique and has relationship to the payload   ( nested records if any). For example:
+
+  If payload has `user` details  then best practice for attaching key is `Userid` or `Userhandle`.
+
+  Similarly if user payload has `many` nested records under `payment` Array index then ensure that either `UserID` or `BilllingID` or `Userhandle` is attached as `“key”`.
+
+  #### Example B
+
+  ```js
+  await helper.postEvent(config.TAAS_WORK_PERIOD_CREATE_TOPIC, created.toJSON(), { key: `resourceBooking.id:${workPeriod.resourceBookingId}` })
+  ```
+
+  In the above example, Before event is posted kafka  key : <TxtColor txt="Resourcebooking.id:1234-4858-999-aabb" txtColor="blue" /> is added
+
+  Here are the github [code-example1](https://github.com/topcoder-platform/taas-apis/blob/d9ae1d33afd3187a14d2fdf9c4c6a20f3e379c5f/src/services/PaymentSchedulerService.js#L93) and github [code-example2](https://github.com/topcoder-platform/taas-apis/blob/961d5352fbd6918d12cf409d8dc8b920560a8798/src/services/WorkPeriodService.js#L235) examples 
+
+### 2. Elastic search : Attaching painless script.
+
+  [Painless](https://www.elastic.co/guide/en/elasticsearch/painless/current/painless-guide.html) is a simple, secure scripting language designed specifically for use with Elasticsearch. It’s efficient and it run several times faster compared to traditional code that’s been used to do CRUD operation on ES. This has been implemented in our project and have benefitted. 
+
+  One of the use case that we found very use full is that - The ES index for `update` operation was happening  even before the parent index `create` object is created. Though, this issue was intermittent but the issue always used to occur 2-3 out of 10 transactions.
+
+  #### Example A
+
+  ```js
+  https://github.com/topcoder-platform/taas-es-processor/blob/22a63bcc3c2754a7a1ed9e5f592b1f9a2466884f/src/services/WorkPeriodProcessorService.js#L51
+  ```
+
+### 3. Kakfa Topic : What not to do.
+
+  Avoid having separate kafka topic for `create`/`update`/`delete` ( CUD ) like this - this isn’t a good practice  and from Elastic search point of view logically related index for `create`/`update`  has to be in the same topic.
+
+  <MsgBox bgColor="#FFEBE6" txtColor="black" iconColor="red" iconType="error">
+    <p>taas.workperiod.create</p>
+    <p>taas.workperiod.update</p>
+    <p>taas.workperiod.delete</p>
+  </MsgBox>
+  
+  Instead - right way
+
+  <MsgBox bgColor="#E3FCEF" txtColor="black" iconColor="green" iconType="success">
+    taas.workperiod.aggegate
+  </MsgBox>
+
+  Also, refer to the complete guide for Kafka message, best practice and standards [here](https://platform.topcoder-dev.com/model/standards/publish-receive-events)
+
+<Copyright />
