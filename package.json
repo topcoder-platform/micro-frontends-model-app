@@ -75,6 +75,6 @@
     "react-router-dom": "^5.2.0",
     "react-use": "^15.3.4",
     "styled-components": "^5.2.1",
-    "swagger-ui-react": "^3.41.1"
+    "swagger-ui-react": "^4.7.0"
   }
 }
