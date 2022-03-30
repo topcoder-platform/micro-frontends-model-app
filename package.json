@@ -70,7 +70,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-flow-renderer": "^8.8.0",
+    "react-flow-renderer": "^9.6.1",
     "react-loadable": "^5.5.0",
     "react-router-dom": "^5.2.0",
     "react-use": "^15.3.4",
