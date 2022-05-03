@@ -6,7 +6,7 @@ import {
   logout,
   getAuthUserTokens,
   getAuthUserProfile,
-} from "@topcoder/micro-frontends-navbar-app";
+} from "@topcoder/mfe-header";
 import SwaggerUI from "swagger-ui-react";
 import "swagger-ui-react/swagger-ui.css";
 
